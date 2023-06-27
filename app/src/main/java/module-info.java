@@ -4,6 +4,6 @@ module org.cirdles.app {
     requires movieGradle.core.main;
 
 
-    opens org.circle.app to javafx.fxml;
+    opens org.cirdles.app to javafx.fxml;
     exports org.cirdles.app;
 }
