@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.cirdles.app.HelloController">
-  <padding>
-    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-  </padding>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-  <Label fx:id="welcomeText"/>
-  <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<AnchorPane prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cirdles.app.MovieController">
+  <TextField fx:id="nameField" layoutX="40.0" layoutY="30.0" promptText="Enter movie name"/>
+  <TextField fx:id="releaseField" layoutX="40.0" layoutY="70.0" promptText="Enter release year"/>
+  <TextField fx:id="genreField" layoutX="40.0" layoutY="110.0" promptText="Enter movie genre"/>
+  <Button layoutX="40.0" layoutY="150.0" mnemonicParsing="false" onAction="#onHelloButtonClick" text="Add Movie"/>
+  <Button layoutX="130.0" layoutY="150.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Save Movies"/>
+  <Label fx:id="welcomeText" layoutX="40.0" layoutY="200.0" prefWidth="240.0" wrapText="true"/>
+</AnchorPane>
