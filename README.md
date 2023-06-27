@@ -1,6 +1,6 @@
 # movieGradle  
 #
-# Serialization and deserialization of Movie sets
+# Serialization and Deserialization of Movie Sets
 
 ### README:
 
