@@ -2,14 +2,16 @@ package org.cirdles.app;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.cirdles.Movie;
 import org.cirdles.BinarySerializer;
 import org.cirdles.XMLSerializer;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,8 +25,6 @@ public class MovieController {
     private TextField releaseField;
     @FXML
     private TextField genreField;
-    @FXML
-    private Button helpButton;
 
     private Set<Movie> movieSet;
 
@@ -53,21 +53,35 @@ public class MovieController {
             welcomeText.setText("Please enter movie details!");
         }
     }
+
     @FXML
     protected void onSaveButtonClick() {
         if (!movieSet.isEmpty()) {
             try {
-                String filename = "movies.csv";
-                Movie.serializeSetToCSV(movieSet, filename);
-                welcomeText.setText("Movie data exported to CSV, binary, and XML files!");
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save CSV File");
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
 
-                // Serialize to binary
-                String binaryFilename = "movies.bin";
-                BinarySerializer.serializeToBinary(movieSet, binaryFilename);
+                // Show save file dialog
+                Stage stage = (Stage) welcomeText.getScene().getWindow();
+                File file = fileChooser.showSaveDialog(stage);
 
-                // Serialize to XML
-                String xmlFilename = "movies.xml";
-                XMLSerializer.serializeToXML(movieSet, xmlFilename);
+                if (file != null) {
+                    String filename = file.getPath();
+                    Movie.serializeSetToCSV(movieSet, filename);
+                    welcomeText.setText("Data exported to CSV, binary, and XML files!");
+
+                    // Get the file's parent directory
+                    String parentDir = file.getParent();
+
+                    // Serialize to binary
+                    String binaryFilename = parentDir + File.separator + "movies.bin";
+                    BinarySerializer.serializeToBinary(movieSet, binaryFilename);
+
+                    // Serialize to XML
+                    String xmlFilename = parentDir + File.separator + "movies.xml";
+                    XMLSerializer.serializeToXML(movieSet, xmlFilename);
+                }
             } catch (IOException e) {
                 welcomeText.setText("Error occurred while saving movies!");
             }
@@ -75,6 +89,7 @@ public class MovieController {
             welcomeText.setText("No movies to save!");
         }
     }
+
     @FXML
     protected void onHelpButtonClick() {
         Alert alert = new Alert(AlertType.INFORMATION);
