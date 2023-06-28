@@ -1,8 +1,11 @@
 package org.cirdles.app;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import org.cirdles.Movie;
 import org.cirdles.BinarySerializer;
 import org.cirdles.XMLSerializer;
@@ -14,22 +17,20 @@ import java.util.Set;
 public class MovieController {
     @FXML
     private Label welcomeText;
-
     @FXML
     private TextField nameField;
-
     @FXML
     private TextField releaseField;
-
     @FXML
     private TextField genreField;
+    @FXML
+    private Button helpButton;
 
     private Set<Movie> movieSet;
 
     public MovieController() {
         movieSet = new HashSet<>();
     }
-
     @FXML
     protected void onHelloButtonClick() {
         String name = nameField.getText();
@@ -52,7 +53,6 @@ public class MovieController {
             welcomeText.setText("Please enter movie details!");
         }
     }
-
     @FXML
     protected void onSaveButtonClick() {
         if (!movieSet.isEmpty()) {
@@ -74,5 +74,17 @@ public class MovieController {
         } else {
             welcomeText.setText("No movies to save!");
         }
+    }
+    @FXML
+    protected void onHelpButtonClick() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Help");
+        alert.setHeaderText("Movie Application");
+        alert.setContentText("This is the help documentation for the Movie Application.\n\n" +
+                "Enter the details of a movie in the respective fields and click 'Add Movie' to add it to the collection.\n" +
+                "Once you have added multiple movies, click 'Save Movies' to export the movie data to CSV, binary, and XML files.\n\n" +
+                "For further assistance, please refer to the README.\n" +
+                "BY: github.com/mynguy");
+        alert.showAndWait();
     }
 }
