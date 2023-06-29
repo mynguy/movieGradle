@@ -2,34 +2,36 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.cirdles.app.MovieController">
   <padding>
-    <Insets top="20" right="20" bottom="20" left="20" />
+    <Insets top="20" right="20" bottom="20" left="20"/>
   </padding>
   <VBox spacing="8">
     <VBox spacing="1">
-      <Label text="Movie Name" />
-      <TextField fx:id="nameField" promptText="Enter movie name" />
+      <Label text="Movie Name"/>
+      <TextField fx:id="nameField" promptText="Enter movie name"/>
     </VBox>
-    <VBox spacing="1">
-      <Label text="Release Year" />
-      <TextField fx:id="releaseField" promptText="Enter release year" />
+    <VBox spacing="1" alignment="CENTER_RIGHT">
+      <TextField fx:id="releaseField" promptText="Enter release year"/>
     </VBox>
-    <VBox spacing="1">
-      <Label text="Genre" />
-      <TextField fx:id="genreField" promptText="Enter genre" />
-    </VBox>
-    <HBox spacing="8">
-      <Button text="Add Movie" onAction="#onHelloButtonClick" />
-      <Button text="Save Movies" onAction="#onSaveButtonClick" />
+    <HBox spacing="8" alignment="CENTER_LEFT">
+      <ComboBox fx:id="genreComboBox" promptText="Select genre"/>
+      <Button text="Add Data" onAction="#onHelloButtonClick"/>
     </HBox>
-    <Label fx:id="welcomeText" />
-    <Button text="Help" onAction="#onHelpButtonClick" />
+    <HBox spacing="8">
+      <Button text="Save as XML" onAction="#onSaveXMLButtonClick"/>
+      <Button text="Save as CSV" onAction="#onSaveCSVButtonClick"/>
+      <Button text="Save as Binary" onAction="#onSaveBinaryButtonClick"/>
+    </HBox>
+    <Label fx:id="welcomeText"/>
+    <Button text="Help" onAction="#onHelpButtonClick"/>
   </VBox>
 </VBox>

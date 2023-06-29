@@ -7,6 +7,7 @@
  */
 package org.cirdles;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+@XmlRootElement
 public class Movie implements Comparable<Movie>, Serializable {
 
     private String name;

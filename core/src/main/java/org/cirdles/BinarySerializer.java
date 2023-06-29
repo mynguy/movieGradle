@@ -10,6 +10,9 @@ package org.cirdles;
 import java.io.*;
 import java.util.Set;
 
+/**
+ * Utility class for serializing and deserializing a set of movies to/from Binary.
+ */
 public class BinarySerializer implements Serializable {
 
     /**
@@ -22,8 +25,8 @@ public class BinarySerializer implements Serializable {
     public static void serializeToBinary(Set<?> movieSet, String filename) throws IOException {
         try (FileOutputStream fileOut = new FileOutputStream(filename);
              ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)) {
-            objectOut.writeObject(movieSet);
-        }
+                objectOut.writeObject(movieSet);
+             }
     }
 
     /**
@@ -37,7 +40,7 @@ public class BinarySerializer implements Serializable {
     public static Set<?> deserializeFromBinary(String filename) throws IOException, ClassNotFoundException {
         try (FileInputStream fileIn = new FileInputStream(filename);
              ObjectInputStream objectIn = new ObjectInputStream(fileIn)) {
-            return (Set<?>) objectIn.readObject();
-        }
+                return (Set<?>) objectIn.readObject();
+            }
     }
 }
