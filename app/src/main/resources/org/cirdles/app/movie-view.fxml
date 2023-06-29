@@ -19,7 +19,8 @@
       <Label text="Movie Name"/>
       <TextField fx:id="nameField" promptText="Enter movie name"/>
     </VBox>
-    <VBox spacing="1" alignment="CENTER_RIGHT">
+    <VBox spacing="1" alignment="CENTER_LEFT">
+      <Label text="Release Year"/>
       <TextField fx:id="releaseField" promptText="Enter release year"/>
     </VBox>
     <HBox spacing="8" alignment="CENTER_LEFT">

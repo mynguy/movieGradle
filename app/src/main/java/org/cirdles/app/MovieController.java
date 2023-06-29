@@ -33,6 +33,11 @@ public class MovieController {
 
     @FXML
     public void initialize() {
+
+        // Removing focus
+        nameField.setFocusTraversable(false);
+        releaseField.setFocusTraversable(false);
+
         // Populate genre options
         genreComboBox.getItems().addAll(
                 "Action",

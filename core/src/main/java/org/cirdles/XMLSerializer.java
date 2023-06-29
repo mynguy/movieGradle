@@ -7,53 +7,40 @@
  * */
 package org.cirdles;
 
-import javax.xml.bind.*;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.Set;
 
 /**
- * Utility class for serializing and deserializing a set of movies to/from XML.
+ * Utility class for serializing and deserializing a movie to/from XML.
  */
 public class XMLSerializer {
 
     /**
-     * Serializes a set of movies to XML.
+     * Serializes a movie to XML.
      *
-     * @param object   the set of movies to serialize
+     * @param movieSet    the movie to serialize
      * @param filename the name of the XML file to create
      * @throws IOException if an error occurs while serializing to XML
      */
-    public static void serializeToXML(Set<Movie> object, String filename) throws IOException {
-        try {
-            MovieSetWrapper wrapper = new MovieSetWrapper();
-            wrapper.setMovies(object);
-
-            JAXBContext context = JAXBContext.newInstance(MovieSetWrapper.class);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(wrapper, new File(filename));
-        } catch (JAXBException e) {
-            throw new IOException("Error occurred while serializing to XML.", e);
+    public static void serializeToXML(Set<?> movieSet, String filename) throws IOException {
+        try (XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filename)))) {
+            encoder.writeObject(movieSet);
         }
     }
 
     /**
-     * Deserializes a set of movies from XML.
+     * Deserializes a movie from XML.
      *
      * @param filename the name of the XML file to deserialize from
-     * @return the deserialized set of movies
+     * @return the deserialized movie
      * @throws IOException            if an error occurs while deserializing from XML
      * @throws ClassNotFoundException if the class for the deserialized object is not found
      */
     public static Set<?> deserializeFromXML(String filename) throws IOException, ClassNotFoundException {
-        try {
-            JAXBContext context = JAXBContext.newInstance(MovieSetWrapper.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            MovieSetWrapper wrapper = (MovieSetWrapper) unmarshaller.unmarshal(new File(filename));
-            return wrapper.getMovies();
-        } catch (JAXBException e) {
-            throw new IOException("Error occurred while deserializing from XML.", e);
+        try (XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)))) {
+            return (Set<?>) decoder.readObject();
         }
     }
 }
-
