@@ -4,10 +4,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.cirdles.app.MovieController">
@@ -32,6 +32,12 @@
       <Button text="Save as CSV" onAction="#onSaveCSVButtonClick"/>
       <Button text="Save as Binary" onAction="#onSaveBinaryButtonClick"/>
     </HBox>
+    <HBox spacing="8">
+      <Button text="Import XML" onAction="#onOpenXMLButtonClick"/>
+      <Button text="Import Binary" onAction="#onOpenBinaryButtonClick"/>
+      <Button text="Import CSV" onAction="#onOpenCSVButtonClick"/>
+    </HBox>
+    <ListView fx:id="movieListView" VBox.vgrow="ALWAYS"/>
     <Label fx:id="welcomeText"/>
     <Button text="Help" onAction="#onHelpButtonClick"/>
   </VBox>

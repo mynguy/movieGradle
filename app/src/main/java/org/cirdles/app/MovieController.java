@@ -1,13 +1,11 @@
 package org.cirdles.app;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.cirdles.*;
 
 import java.io.File;
@@ -24,6 +22,8 @@ public class MovieController {
     private TextField releaseField;
     @FXML
     private ComboBox<String> genreComboBox;
+    @FXML
+    private ListView<Movie> movieListView;
 
     private Set<Movie> movieSet;
 
@@ -33,7 +33,6 @@ public class MovieController {
 
     @FXML
     public void initialize() {
-
         // Removing focus
         nameField.setFocusTraversable(false);
         releaseField.setFocusTraversable(false);
@@ -50,6 +49,24 @@ public class MovieController {
                 "Sci-Fi",
                 "Thriller"
         );
+
+        // Set up custom cell factory to display movie names and genres in the ListView
+        movieListView.setCellFactory(new Callback<>() {
+            @Override
+            public ListCell<Movie> call(ListView<Movie> listView) {
+                return new ListCell<>() {
+                    @Override
+                    protected void updateItem(Movie movie, boolean empty) {
+                        super.updateItem(movie, empty);
+                        if (movie != null) {
+                            setText(movie.getName() + " - " + movie.getGenre());
+                        } else {
+                            setText(null);
+                        }
+                    }
+                };
+            }
+        });
     }
 
     @FXML
@@ -166,5 +183,96 @@ public class MovieController {
                 "For further assistance, please refer to the README.\n" +
                 "BY: github.com/mynguy");
         alert.showAndWait();
+    }
+
+    @FXML
+    private void onOpenXMLButtonClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Movie Set XML");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("XML Files", "*.xml"));
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            try {
+                Set<Movie> movieSet = (Set<Movie>) XMLSerializer.deserializeFromXML(selectedFile.getPath());
+                movieListView.getItems().clear();
+                movieListView.getItems().addAll(movieSet);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    protected void onOpenBinaryButtonClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Movie Set (Binary)");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Binary Files", "*.bin"));
+
+        // Show open file dialog
+        Stage stage = (Stage) welcomeText.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            String filename = file.getPath();
+
+            try {
+                Set<Movie> loadedMovieSet = (Set<Movie>) BinarySerializer.deserializeFromBinary(filename);
+                if (loadedMovieSet != null && !loadedMovieSet.isEmpty()) {
+                    movieSet = loadedMovieSet;
+                    movieListView.getItems().clear();
+                    movieListView.getItems().addAll(movieSet);
+                    welcomeText.setText("Movie set loaded from Binary: " + filename);
+                } else {
+                    welcomeText.setText("Invalid movie set in the Binary file!");
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                welcomeText.setText("Error occurred while loading movie set from Binary file!");
+            }
+        }
+    }
+
+    @FXML
+    protected void onOpenCSVButtonClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Movie Set (CSV)");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+        // Show open file dialog
+        Stage stage = (Stage) welcomeText.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            String filename = file.getPath();
+
+            try {
+                Set<Movie> loadedMovieSet = Movie.deserializeSetFromCSV(filename);
+                if (loadedMovieSet != null && !loadedMovieSet.isEmpty()) {
+                    movieSet = loadedMovieSet;
+                    movieListView.getItems().clear();
+                    movieListView.getItems().addAll(movieSet);
+                    welcomeText.setText("Movie set loaded from CSV: " + filename);
+                } else {
+                    welcomeText.setText("Invalid movie set in the CSV file!");
+                }
+            } catch (IOException e) {
+                welcomeText.setText("Error occurred while loading movie set from CSV file!");
+            }
+        }
+    }
+
+    private void displayMovieSet() {
+        StringBuilder movieNames = new StringBuilder();
+        for (Movie movie : movieSet) {
+            movieNames.append(movie.getName()).append(", ");
+        }
+
+        String displayText = movieNames.toString();
+        if (displayText.endsWith(", ")) {
+            displayText = displayText.substring(0, displayText.length() - 2);
+        }
+
+        welcomeText.setText("Movie Set: " + displayText);
     }
 }

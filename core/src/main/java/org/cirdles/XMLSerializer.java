@@ -10,33 +10,34 @@ package org.cirdles;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Utility class for serializing and deserializing a movie to/from XML.
+ * Utility class for serializing and deserializing objects to/from XML.
  */
 public class XMLSerializer {
 
     /**
-     * Serializes a movie to XML.
+     * Serializes a set of objects to XML.
      *
-     * @param movieSet    the movie to serialize
-     * @param filename the name of the XML file to create
+     * @param objectSet the set of objects to serialize
+     * @param filename  the name of the XML file to create
      * @throws IOException if an error occurs while serializing to XML
      */
-    public static void serializeToXML(Set<?> movieSet, String filename) throws IOException {
+    public static void serializeToXML(Set<?> objectSet, String filename) throws IOException {
         try (XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(filename)))) {
-            encoder.writeObject(movieSet);
+            encoder.writeObject(objectSet);
         }
     }
 
     /**
-     * Deserializes a movie from XML.
+     * Deserializes a set of objects from XML.
      *
      * @param filename the name of the XML file to deserialize from
-     * @return the deserialized movie
+     * @return the deserialized set of objects
      * @throws IOException            if an error occurs while deserializing from XML
-     * @throws ClassNotFoundException if the class for the deserialized object is not found
+     * @throws ClassNotFoundException if the class for the deserialized objects is not found
      */
     public static Set<?> deserializeFromXML(String filename) throws IOException, ClassNotFoundException {
         try (XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(filename)))) {
