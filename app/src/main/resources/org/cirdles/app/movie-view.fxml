@@ -5,40 +5,57 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.cirdles.app.MovieController">
+      fx:controller="org.cirdles.app.MovieController"
+      minWidth="100" minHeight="100">
   <padding>
     <Insets top="20" right="20" bottom="20" left="20"/>
   </padding>
-  <VBox spacing="8">
-    <VBox spacing="1">
-      <Label text="Movie Name"/>
-      <TextField fx:id="nameField" promptText="Enter movie name"/>
-    </VBox>
-    <VBox spacing="1" alignment="CENTER_LEFT">
-      <Label text="Release Year"/>
-      <TextField fx:id="releaseField" promptText="Enter release year"/>
-    </VBox>
-    <HBox spacing="8" alignment="CENTER_LEFT">
-      <ComboBox fx:id="genreComboBox" promptText="Select genre"/>
-      <Button text="Add Data" onAction="#onHelloButtonClick"/>
-    </HBox>
-    <HBox spacing="8">
-      <Button text="Save as XML" onAction="#onSaveXMLButtonClick"/>
-      <Button text="Save as CSV" onAction="#onSaveCSVButtonClick"/>
-      <Button text="Save as Binary" onAction="#onSaveBinaryButtonClick"/>
-    </HBox>
-    <HBox spacing="8">
-      <Button text="Import XML" onAction="#onOpenXMLButtonClick"/>
-      <Button text="Import Binary" onAction="#onOpenBinaryButtonClick"/>
-      <Button text="Import CSV" onAction="#onOpenCSVButtonClick"/>
-    </HBox>
+  <TabPane VBox.vgrow="ALWAYS">
+    <tabs>
+      <Tab text="Export Data">
+        <VBox spacing="4">
+          <VBox spacing="4">
+            <Label text="Movie Name"/>
+            <TextField fx:id="nameField" promptText="Enter movie name"/>
+          </VBox>
+          <VBox spacing="4" alignment="CENTER_LEFT">
+            <Label text="Release Year"/>
+            <TextField fx:id="releaseField" promptText="Enter release year"/>
+          </VBox>
+          <HBox spacing="4" alignment="CENTER_LEFT">
+            <ComboBox fx:id="genreComboBox" promptText="Select genre"/>
+            <Button text="Add Data" onAction="#onHelloButtonClick"/>
+          </HBox>
+          <HBox spacing="4" alignment="CENTER">
+            <Button text="Save as XML" onAction="#onSaveXMLButtonClick"/>
+            <Button text="Save as CSV" onAction="#onSaveCSVButtonClick"/>
+            <Button text="Save as Binary" onAction="#onSaveBinaryButtonClick"/>
+          </HBox>
+          <Label fx:id="statusLabel" />
+        </VBox>
+      </Tab>
+      <Tab text="Import Data">
+        <VBox spacing="4" alignment="CENTER">
+          <Label text="Choose an option" />
+          <HBox spacing="4" alignment="CENTER">
+            <Button text="Import XML" onAction="#onOpenXMLButtonClick"/>
+            <Button text="Import CSV" onAction="#onOpenCSVButtonClick"/>
+            <Button text="Import Binary" onAction="#onOpenBinaryButtonClick"/>
+          </HBox>
+        </VBox>
+      </Tab>
+    </tabs>
+  </TabPane>
+  <VBox VBox.vgrow="NEVER" maxHeight="400">
     <ListView fx:id="movieListView" VBox.vgrow="ALWAYS"/>
-    <Label fx:id="welcomeText"/>
-    <Button text="Help" onAction="#onHelpButtonClick"/>
   </VBox>
+  <Label fx:id="welcomeText"/>
+  <Button text="Help" onAction="#onHelpButtonClick"/>
 </VBox>

@@ -50,7 +50,7 @@ public class MovieController {
                 "Thriller"
         );
 
-        // Set up custom cell factory to display movie names and genres in the ListView
+        // Set up custom cell factory to display movie details in the ListView
         movieListView.setCellFactory(new Callback<>() {
             @Override
             public ListCell<Movie> call(ListView<Movie> listView) {
@@ -59,7 +59,8 @@ public class MovieController {
                     protected void updateItem(Movie movie, boolean empty) {
                         super.updateItem(movie, empty);
                         if (movie != null) {
-                            setText(movie.getName() + " - " + movie.getGenre());
+                            setText(String.format("Name: %s%nRelease Year: %d%nGenre: %s",
+                                    movie.getName(), movie.getYear(), movie.getGenre()));
                         } else {
                             setText(null);
                         }
@@ -68,7 +69,7 @@ public class MovieController {
             }
         });
     }
-
+    
     @FXML
     protected void onHelloButtonClick() {
         String name = nameField.getText();
@@ -260,19 +261,5 @@ public class MovieController {
                 welcomeText.setText("Error occurred while loading movie set from CSV file!");
             }
         }
-    }
-
-    private void displayMovieSet() {
-        StringBuilder movieNames = new StringBuilder();
-        for (Movie movie : movieSet) {
-            movieNames.append(movie.getName()).append(", ");
-        }
-
-        String displayText = movieNames.toString();
-        if (displayText.endsWith(", ")) {
-            displayText = displayText.substring(0, displayText.length() - 2);
-        }
-
-        welcomeText.setText("Movie Set: " + displayText);
     }
 }
