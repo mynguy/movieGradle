@@ -31,14 +31,14 @@
           </VBox>
           <HBox spacing="4" alignment="CENTER_LEFT">
             <ComboBox fx:id="genreComboBox" promptText="Select genre"/>
-            <Button text="Add Data" onAction="#onHelloButtonClick"/>
+            <Button text="Add Movie" onAction="#addMovieButtonClicked"/>
+            <Button text="Edit" onAction="#onEditButtonClick"/>
           </HBox>
           <HBox spacing="4" alignment="CENTER">
             <Button text="Save as XML" onAction="#onSaveXMLButtonClick"/>
             <Button text="Save as CSV" onAction="#onSaveCSVButtonClick"/>
             <Button text="Save as Binary" onAction="#onSaveBinaryButtonClick"/>
           </HBox>
-          <Label fx:id="statusLabel" />
         </VBox>
       </Tab>
       <Tab text="Import Data">
@@ -55,6 +55,7 @@
   </TabPane>
   <VBox VBox.vgrow="NEVER" maxHeight="400">
     <ListView fx:id="movieListView" VBox.vgrow="ALWAYS"/>
+    <Button text="Remove" onAction="#removeButtonClicked"/>
   </VBox>
   <Label fx:id="welcomeText"/>
   <Button text="Help" onAction="#onHelpButtonClick"/>

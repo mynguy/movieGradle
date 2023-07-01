@@ -10,7 +10,6 @@ package org.cirdles;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
