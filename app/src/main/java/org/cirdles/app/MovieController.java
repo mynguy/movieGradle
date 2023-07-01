@@ -189,8 +189,8 @@ public class MovieController {
         alert.setHeaderText("Movie Application");
         alert.setContentText("This is the help documentation for the Movie Application.\n\n" +
                 "Enter the details of a movie in the respective fields and select a genre from the dropdown menu. " +
-                "Click 'Add Movie' to add it to the collection.\n" +
-                "Once you have added multiple movies, use the 'File' menu to save the movie data as CSV or XML.\n\n" +
+                "\nClick 'Add Movie' to add it to the collection. Click 'Edit' to edit a movie's data.\n" +
+                "Once you have added multiple movies, use the select a 'Save as' button to save the movie data as CSV, XML, or Binary.\n\n" +
                 "For further assistance, please refer to the README.\n" +
                 "BY: github.com/mynguy");
         alert.showAndWait();
