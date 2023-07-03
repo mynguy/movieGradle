@@ -1,11 +1,13 @@
 package org.cirdles.app;
 
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -18,6 +20,13 @@ import java.util.Optional;
 import java.util.Set;
 
 public class MovieController {
+
+    private HostServices hostServices;
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
+
     @FXML
     private Label welcomeText;
     @FXML
@@ -28,8 +37,6 @@ public class MovieController {
     private ComboBox<String> genreComboBox;
     @FXML
     private ListView<Movie> movieListView;
-    @FXML
-    private Button editButton;
 
     private Set<Movie> movieSet;
 
@@ -184,15 +191,30 @@ public class MovieController {
 
     @FXML
     protected void onHelpButtonClick() {
-        Alert alert = new Alert(AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Help");
         alert.setHeaderText("Movie Application");
-        alert.setContentText("This is the help documentation for the Movie Application.\n\n" +
+
+        VBox content = new VBox();
+        content.setSpacing(10);
+
+        Text helpText = new Text("This is the help documentation for the Movie Application.\n\n" +
                 "Enter the details of a movie in the respective fields and select a genre from the dropdown menu. " +
                 "\nClick 'Add Movie' to add it to the collection. Click 'Edit' to edit a movie's data.\n" +
-                "Once you have added multiple movies, use the select a 'Save as' button to save the movie data as CSV, XML, or Binary.\n\n" +
-                "For further assistance, please refer to the README.\n" +
-                "BY: github.com/mynguy");
+                "Once you have added multiple movies, use the 'Save as' buttons to save the movie data as CSV, XML, or Binary.\n");
+
+        Button readmeButton = new Button("Link to Documentation");
+        readmeButton.setOnAction(e -> {
+            // Open the link in the default browser
+            hostServices.showDocument("https://github.com/mynguy/movieGradle/blob/main/README.md");
+        });
+
+        VBox vbox = new VBox();
+        vbox.getChildren().addAll(helpText, readmeButton);
+        content.getChildren().add(vbox);
+
+        alert.getDialogPane().setContent(content);
+
         alert.showAndWait();
     }
 
