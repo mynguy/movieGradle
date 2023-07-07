@@ -224,11 +224,10 @@ public class MovieController {
     }
 
     @FXML
-    private void onOpenXMLButtonClick() {
+    protected void onOpenXMLButtonClick() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Movie Set XML");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("XML Files", "*.xml"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
 
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
@@ -236,6 +235,13 @@ public class MovieController {
                 Set<Movie> movieSet = (Set<Movie>) XMLSerializer.deserializeFromXML(selectedFile.getPath());
                 movieListView.getItems().clear();
                 movieListView.getItems().addAll(movieSet);
+                welcomeText.setText("Movie set loaded from XML: " + selectedFile.getName());
+
+                // Hide the logo
+                logoImageView.setVisible(false);
+
+                // Show the session container
+                sessionContainer.setVisible(true);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -262,6 +268,12 @@ public class MovieController {
                     movieListView.getItems().clear();
                     movieListView.getItems().addAll(movieSet);
                     welcomeText.setText("Movie set loaded from Binary: " + filename);
+
+                    // Hide the logo
+                    logoImageView.setVisible(false);
+
+                    // Show the session container
+                    sessionContainer.setVisible(true);
                 } else {
                     welcomeText.setText("Invalid movie set in the Binary file!");
                 }
@@ -291,6 +303,12 @@ public class MovieController {
                     movieListView.getItems().clear();
                     movieListView.getItems().addAll(movieSet);
                     welcomeText.setText("Movie set loaded from CSV: " + filename);
+
+                    // Hide the logo
+                    logoImageView.setVisible(false);
+
+                    // Show the session container
+                    sessionContainer.setVisible(true);
                 } else {
                     welcomeText.setText("Invalid movie set in the CSV file!");
                 }
@@ -421,9 +439,21 @@ public class MovieController {
 
     @FXML
     protected void onCloseSessionClicked() {
-        sessionContainer.setVisible(false);
+        sessionContainer.setVisible(false); // Hide the session container
+
+        // Clear the input fields
+        nameField.clear();
+        releaseField.clear();
+        genreComboBox.setValue(null);
+
+        // Clear the movie list view
+        movieListView.getItems().clear();
+
         // Show the logo
         logoImageView.setVisible(true);
+
+        // Clear the welcomeText label
+        welcomeText.setText("");
     }
 
     @FXML
