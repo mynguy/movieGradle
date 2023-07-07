@@ -1,42 +1,34 @@
 package org.cirdles.app;
 
 import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class MovieApplication extends Application {
 
-    private HostServices hostServices;
-
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MovieApplication.class.getResource("movie-view.fxml"));
-        VBox root = fxmlLoader.load();
+    public void start(Stage primaryStage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/cirdles/app/movie-view.fxml"));
+        StackPane root = loader.load();
 
-        MovieController controller = fxmlLoader.getController();
-        controller.setHostServices(hostServices);
+        MovieController controller = loader.getController();
+        controller.setHostServices(getHostServices());
 
         Scene scene = new Scene(root);
 
-        stage.setTitle("Movie Serialization");
-        stage.setScene(scene);
-        stage.setMinWidth(320);
-        stage.setMinHeight(240);
+        primaryStage.setTitle("Movie Serialization");
+        primaryStage.setScene(scene);
+        primaryStage.setMinWidth(320);
+        primaryStage.setMinHeight(240);
 
-        stage.show();
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
-        launch();
-    }
-
-    @Override
-    public void init() {
-        hostServices = getHostServices();
+        launch(args);
     }
 }

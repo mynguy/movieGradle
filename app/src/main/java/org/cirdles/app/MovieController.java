@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -37,6 +38,10 @@ public class MovieController {
     private ComboBox<String> genreComboBox;
     @FXML
     private ListView<Movie> movieListView;
+    @FXML
+    private VBox sessionContainer;
+    @FXML
+    private ImageView logoImageView;
 
     private Set<Movie> movieSet;
 
@@ -394,5 +399,36 @@ public class MovieController {
         } else {
             welcomeText.setText("Please select a movie to update!");
         }
+    }
+
+    @FXML
+    protected void onNewSessionClicked() {
+        // Show the session container
+        sessionContainer.setVisible(true);
+
+        // Clear the input fields
+        nameField.clear();
+        releaseField.clear();
+        genreComboBox.setValue(null);
+
+        // Clear the movie list view
+        movieListView.getItems().clear();
+
+        // Hide the logo when "Start New Session" button is clicked
+        logoImageView.setVisible(false);
+
+    }
+
+    @FXML
+    protected void onCloseSessionClicked() {
+        sessionContainer.setVisible(false);
+        // Show the logo
+        logoImageView.setVisible(true);
+    }
+
+    @FXML
+    protected void onQuitClicked() {
+        // Get the current stage and close the application
+        welcomeText.getScene().getWindow().hide();
     }
 }
