@@ -5,13 +5,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.cirdles.*;
 
 import java.io.File;
@@ -37,7 +37,13 @@ public class MovieController {
     @FXML
     private ComboBox<String> genreComboBox;
     @FXML
-    private ListView<Movie> movieListView;
+    private TableView<Movie> movieTableView;
+    @FXML
+    private TableColumn<Movie, String> nameColumn;
+    @FXML
+    private TableColumn<Movie, Integer> releaseYearColumn;
+    @FXML
+    private TableColumn<Movie, String> genreColumn;
     @FXML
     private VBox sessionContainer;
     @FXML
@@ -49,14 +55,10 @@ public class MovieController {
         movieSet = new HashSet<>();
     }
 
-    @FXML
     public void initialize() {
         // Removing focus
         nameField.setFocusTraversable(false);
         releaseField.setFocusTraversable(false);
-
-        // Enable multiple selection in the ListView
-        movieListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         // Populate genre options
         genreComboBox.getItems().addAll(
@@ -71,24 +73,18 @@ public class MovieController {
                 "Thriller"
         );
 
-        // Set up custom cell factory to display movie details in the ListView
-        movieListView.setCellFactory(new Callback<>() {
-            @Override
-            public ListCell<Movie> call(ListView<Movie> listView) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(Movie movie, boolean empty) {
-                        super.updateItem(movie, empty);
-                        if (movie != null) {
-                            setText(String.format("Name: %s%nRelease Year: %d%nGenre: %s",
-                                    movie.getName(), movie.getYear(), movie.getGenre()));
-                        } else {
-                            setText(null);
-                        }
-                    }
-                };
-            }
-        });
+        // Initialize TableView columns
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+
+        // Populate TableView with movieSet data
+        movieTableView.getItems().addAll(movieSet);
+
+        // Disable column sorting arrows
+        nameColumn.setSortNode(null);
+        releaseYearColumn.setSortNode(null);
+        genreColumn.setSortNode(null);
     }
 
     @FXML
@@ -103,11 +99,13 @@ public class MovieController {
                 if (release >= 1000 && release <= 3000) {
                     Movie movie = new Movie(name, release, genre);
                     movieSet.add(movie);
-                    movieListView.getItems().add(movie); // Add movie to the ListView
+                    movieTableView.getItems().add(movie); // Add movie to the TableView
                     welcomeText.setText("Movie added: " + movie.getName());
                     nameField.clear();
                     releaseField.clear();
-                    genreComboBox.setValue(null);
+                    genreComboBox.getItems().clear(); // Clear existing items
+                    genreComboBox.getItems().add("Select genre"); // Add "Select genre" as the first item
+                    genreComboBox.getSelectionModel().selectFirst(); // Select the first item
                 } else {
                     welcomeText.setText("Invalid release year!");
                 }
@@ -233,9 +231,9 @@ public class MovieController {
         if (selectedFile != null) {
             try {
                 Set<Movie> movieSet = (Set<Movie>) XMLSerializer.deserializeFromXML(selectedFile.getPath());
-                movieListView.getItems().clear();
-                movieListView.getItems().addAll(movieSet);
-                welcomeText.setText("Movie set loaded from XML: " + selectedFile.getName());
+                movieTableView.getItems().clear();
+                movieTableView.getItems().addAll(movieSet);
+                welcomeText.setText("Movie set loaded from XML");
 
                 // Hide the logo
                 logoImageView.setVisible(false);
@@ -246,6 +244,9 @@ public class MovieController {
                 e.printStackTrace();
             }
         }
+        // Reset genreComboBox
+        genreComboBox.setValue(null);
+        genreComboBox.setPromptText("Select genre");
     }
 
     @FXML
@@ -265,9 +266,9 @@ public class MovieController {
                 Set<Movie> loadedMovieSet = (Set<Movie>) BinarySerializer.deserializeFromBinary(filename);
                 if (loadedMovieSet != null && !loadedMovieSet.isEmpty()) {
                     movieSet = loadedMovieSet;
-                    movieListView.getItems().clear();
-                    movieListView.getItems().addAll(movieSet);
-                    welcomeText.setText("Movie set loaded from Binary: " + filename);
+                    movieTableView.getItems().clear();
+                    movieTableView.getItems().addAll(movieSet);
+                    welcomeText.setText("Movie set loaded from Binary");
 
                     // Hide the logo
                     logoImageView.setVisible(false);
@@ -281,6 +282,9 @@ public class MovieController {
                 welcomeText.setText("Error occurred while loading movie set from Binary file!");
             }
         }
+        // Reset genreComboBox
+        genreComboBox.setValue(null);
+        genreComboBox.setPromptText("Select genre");
     }
 
     @FXML
@@ -300,9 +304,9 @@ public class MovieController {
                 Set<Movie> loadedMovieSet = Movie.deserializeSetFromCSV(filename);
                 if (loadedMovieSet != null && !loadedMovieSet.isEmpty()) {
                     movieSet = loadedMovieSet;
-                    movieListView.getItems().clear();
-                    movieListView.getItems().addAll(movieSet);
-                    welcomeText.setText("Movie set loaded from CSV: " + filename);
+                    movieTableView.getItems().clear();
+                    movieTableView.getItems().addAll(movieSet);
+                    welcomeText.setText("Movie set loaded from CSV");
 
                     // Hide the logo
                     logoImageView.setVisible(false);
@@ -316,13 +320,16 @@ public class MovieController {
                 welcomeText.setText("Error occurred while loading movie set from CSV file!");
             }
         }
+        // Reset genreComboBox
+        genreComboBox.setValue(null);
+        genreComboBox.setPromptText("Select genre");
     }
 
     @FXML
     protected void removeButtonClicked() {
-        Movie selectedMovie = movieListView.getSelectionModel().getSelectedItem();
+        Movie selectedMovie = movieTableView.getSelectionModel().getSelectedItem();
         if (selectedMovie != null) {
-            movieListView.getItems().remove(selectedMovie);
+            movieTableView.getItems().remove(selectedMovie);
             movieSet.remove(selectedMovie);
             welcomeText.setText("Movie removed: " + selectedMovie.getName());
         } else {
@@ -332,7 +339,7 @@ public class MovieController {
 
     @FXML
     protected void onEditButtonClick() {
-        Movie selectedMovie = movieListView.getSelectionModel().getSelectedItem();
+        Movie selectedMovie = movieTableView.getSelectionModel().getSelectedItem();
         if (selectedMovie != null) {
             Dialog<Movie> dialog = new Dialog<>();
             dialog.setTitle("Edit Movie");
@@ -408,8 +415,8 @@ public class MovieController {
 
             Optional<Movie> result = dialog.showAndWait();
             result.ifPresent(updatedMovie -> {
-                int selectedIndex = movieListView.getSelectionModel().getSelectedIndex();
-                movieListView.getItems().set(selectedIndex, updatedMovie);
+                int selectedIndex = movieTableView.getSelectionModel().getSelectedIndex();
+                movieTableView.getItems().set(selectedIndex, updatedMovie);
                 movieSet.remove(selectedMovie);
                 movieSet.add(updatedMovie);
                 welcomeText.setText("Movie updated: " + updatedMovie.getName());
@@ -429,12 +436,11 @@ public class MovieController {
         releaseField.clear();
         genreComboBox.setValue(null);
 
-        // Clear the movie list view
-        movieListView.getItems().clear();
+        // Clear the movie table view
+        movieTableView.getItems().clear();
 
         // Hide the logo when "Start New Session" button is clicked
         logoImageView.setVisible(false);
-
     }
 
     @FXML
@@ -446,8 +452,8 @@ public class MovieController {
         releaseField.clear();
         genreComboBox.setValue(null);
 
-        // Clear the movie list view
-        movieListView.getItems().clear();
+        // Clear the movie table view
+        movieTableView.getItems().clear();
 
         // Show the logo
         logoImageView.setVisible(true);
@@ -459,6 +465,8 @@ public class MovieController {
     @FXML
     protected void onQuitClicked() {
         // Get the current stage and close the application
-        welcomeText.getScene().getWindow().hide();
+        Stage stage = (Stage) welcomeText.getScene().getWindow();
+        stage.close();
     }
+
 }
