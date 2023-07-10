@@ -33,6 +33,7 @@ class MovieTest {
         movieSet.add(new Movie("The Shawshank Redemption", 1994, "Drama"));
         movieSet.add(new Movie("The Dark Knight", 2008, "Action"));
     }
+
     @AfterEach
     void tearDown() {
         // Clean up the files generated during testing
@@ -44,11 +45,13 @@ class MovieTest {
         binFile.delete();
         xmlFile.delete();
     }
+
     @Test
     public void testEquals() {
         Set<Movie> movieSetCopy = new TreeSet<>(movieSet);
         assertEquals(movieSet, movieSetCopy);
     }
+
     @Test
     public void testCSVSerializeAndDeserialize() throws IOException {
 
@@ -58,6 +61,7 @@ class MovieTest {
         // Check if the deserialized set is equal to the original set
         assertEquals(movieSet, deserializedSet);
     }
+
     @Test
     public void testBinarySerializeAndDeserialize() throws IOException, ClassNotFoundException {
 
@@ -67,18 +71,20 @@ class MovieTest {
         // Check if the deserialized set is equal to the original set
         assertEquals(movieSet, deserializedSet);
     }
+
     @Test
     public void testXMLSerializeAndDeserialize() throws IOException, ClassNotFoundException {
 
-        // Serialize the movie set to XML
-        XMLSerializer.serializeToXML(movieSet, "movies.bin");
+        // Wrap the movie set in the MovieSetWrapper
+        MovieSetWrapper movieSetWrapper = new MovieSetWrapper(new TreeSet<>(movieSet));
 
-        // Deserialize the movie set from XML
-        Set<Movie> deserializedSet = (TreeSet<Movie>) XMLSerializer.deserializeFromXML("movies.bin");
+        XMLSerializer.serializeToXML(movieSetWrapper, "movies.xml");
+        Set<Movie> deserializedSet = XMLSerializer.deserializeFromXML("movies.xml");
 
         // Check if the deserialized set is equal to the original set
         assertEquals(movieSet, deserializedSet);
     }
+
     @Test
     public void testPrettyPrint() {
         Movie movie = new Movie("Inception", 2010, "Science Fiction");

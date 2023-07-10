@@ -230,7 +230,7 @@ public class MovieController {
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             try {
-                Set<Movie> movieSet = (Set<Movie>) XMLSerializer.deserializeFromXML(selectedFile.getPath());
+                Set<Movie> movieSet = XMLSerializer.deserializeFromXML(selectedFile.getPath());
                 movieTableView.getItems().clear();
                 movieTableView.getItems().addAll(movieSet);
                 welcomeText.setText("Movie set loaded from XML");
