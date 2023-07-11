@@ -2,12 +2,15 @@ package org.cirdles.app;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -45,6 +48,8 @@ public class MovieController {
     @FXML
     private TableColumn<Movie, String> genreColumn;
     @FXML
+    private TableColumn<Movie, Movie> actionColumn;
+    @FXML
     private VBox sessionContainer;
     @FXML
     private ImageView logoImageView;
@@ -59,6 +64,12 @@ public class MovieController {
         // Removing focus
         nameField.setFocusTraversable(false);
         releaseField.setFocusTraversable(false);
+
+        // Set minimum width for the columns
+        actionColumn.setMinWidth(100);
+        genreColumn.setMinWidth(35);
+        releaseYearColumn.setMinWidth(65);
+        nameColumn.setMinWidth(50);
 
         // Populate genre options
         genreComboBox.getItems().addAll(
@@ -78,6 +89,39 @@ public class MovieController {
         releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
 
+        // Initialize action column
+        actionColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        actionColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button editButton = new Button("Edit");
+            private final Button removeButton = new Button("Remove");
+
+            {
+                editButton.setOnAction(event -> {
+                    Movie movie = getTableView().getItems().get(getIndex());
+                    handleEditMovie(movie);
+                });
+
+                removeButton.setOnAction(event -> {
+                    Movie movie = getTableView().getItems().get(getIndex());
+                    handleRemoveMovie(movie);
+                });
+            }
+
+            @Override
+            protected void updateItem(Movie movie, boolean empty) {
+                super.updateItem(movie, empty);
+
+                if (empty || movie == null) {
+                    setGraphic(null);
+                } else {
+                    HBox container = new HBox(5);
+                    container.setAlignment(Pos.CENTER);
+                    container.getChildren().addAll(editButton, removeButton);
+                    setGraphic(container);
+                }
+            }
+        });
+
         // Populate TableView with movieSet data
         movieTableView.getItems().addAll(movieSet);
 
@@ -85,15 +129,18 @@ public class MovieController {
         nameColumn.setSortNode(null);
         releaseYearColumn.setSortNode(null);
         genreColumn.setSortNode(null);
-    }
 
+        // Adjust input box padding
+        nameField.setStyle("-fx-padding: 5;");
+        releaseField.setStyle("-fx-padding: 5;");
+    }
     @FXML
     protected void addMovieButtonClicked() {
         String name = nameField.getText();
         String releaseStr = releaseField.getText();
         String genre = genreComboBox.getValue();
 
-        if (!name.isEmpty() && !releaseStr.isEmpty() && genre != null) {
+        if (!name.isEmpty() && !releaseStr.isEmpty()) {
             try {
                 int release = Integer.parseInt(releaseStr);
                 if (release >= 1000 && release <= 3000) {
@@ -103,18 +150,110 @@ public class MovieController {
                     welcomeText.setText("Movie added: " + movie.getName());
                     nameField.clear();
                     releaseField.clear();
-                    genreComboBox.getItems().clear(); // Clear existing items
-                    genreComboBox.getItems().add("Select genre"); // Add "Select genre" as the first item
-                    genreComboBox.getSelectionModel().selectFirst(); // Select the first item
+
+                    // Check if "Select genre" already exists in the dropdown
+                    if (!genreComboBox.getItems().contains("Select genre")) {
+                        genreComboBox.getItems().add(0, "Select genre"); // Add "Select genre" at the beginning
+                    }
+                    genreComboBox.getSelectionModel().select("Select genre"); // Select "Select genre"
                 } else {
                     welcomeText.setText("Invalid release year!");
                 }
             } catch (NumberFormatException e) {
-                welcomeText.setText("Invalid release year! Please enter a 4-digit number.");
+                welcomeText.setText("Invalid release year! Please enter a valid number.");
             }
         } else {
             welcomeText.setText("Please enter movie details!");
         }
+    }
+
+    private void handleEditMovie(Movie movie) {
+        Dialog<Movie> dialog = new Dialog<>();
+        dialog.setTitle("Edit Movie");
+        dialog.setHeaderText("Edit Movie Details");
+
+        // Set the button types
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        // Create the movie details form
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField nameField = new TextField();
+        nameField.setPromptText("Name");
+        nameField.setText(movie.getName());
+        TextField releaseField = new TextField();
+        releaseField.setPromptText("Release Year");
+        releaseField.setText(String.valueOf(movie.getYear()));
+        ComboBox<String> genreComboBox = new ComboBox<>();
+        genreComboBox.setPromptText("Genre");
+        genreComboBox.getItems().addAll(
+                "Action",
+                "Adventure",
+                "Comedy",
+                "Drama",
+                "Fantasy",
+                "Horror",
+                "Romance",
+                "Sci-Fi",
+                "Thriller"
+        );
+        genreComboBox.setValue(movie.getGenre());
+
+        gridPane.add(new Label("Name:"), 0, 0);
+        gridPane.add(nameField, 1, 0);
+        gridPane.add(new Label("Release Year:"), 0, 1);
+        gridPane.add(releaseField, 1, 1);
+        gridPane.add(new Label("Genre:"), 0, 2);
+        gridPane.add(genreComboBox, 1, 2);
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Request focus on the name field by default
+        Platform.runLater(nameField::requestFocus);
+
+        // Convert the result to a movie object when the save button is clicked
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                String name = nameField.getText();
+                String releaseStr = releaseField.getText();
+                String genre = genreComboBox.getValue();
+
+                if (!name.isEmpty() && !releaseStr.isEmpty() && genre != null) {
+                    try {
+                        int release = Integer.parseInt(releaseStr);
+                        if (release >= 1000 && release <= 3000) {
+                            return new Movie(name, release, genre);
+                        } else {
+                            System.out.println("Invalid release year!");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid release year! Please enter a 4-digit number.");
+                    }
+                } else {
+                    System.out.println("Please enter movie details!");
+                }
+            }
+            return null;
+        });
+
+        Optional<Movie> result = dialog.showAndWait();
+        result.ifPresent(updatedMovie -> {
+            int selectedIndex = movieTableView.getItems().indexOf(movie);
+            movieTableView.getItems().set(selectedIndex, updatedMovie);
+            movieSet.remove(movie);
+            movieSet.add(updatedMovie);
+            welcomeText.setText("Movie updated: " + updatedMovie.getName());
+        });
+    }
+
+    private void handleRemoveMovie(Movie movie) {
+        movieSet.remove(movie);
+        movieTableView.getItems().remove(movie);
+        welcomeText.setText("Movie removed: " + movie.getName());
     }
 
     @FXML
@@ -135,6 +274,7 @@ public class MovieController {
                     welcomeText.setText("Movie data exported as XML!");
                 }
             } catch (IOException e) {
+                e.printStackTrace(); // Print the exception stack trace for debugging
                 welcomeText.setText("Error occurred while saving movies as XML!");
             }
         } else {
@@ -326,107 +466,6 @@ public class MovieController {
     }
 
     @FXML
-    protected void removeButtonClicked() {
-        Movie selectedMovie = movieTableView.getSelectionModel().getSelectedItem();
-        if (selectedMovie != null) {
-            movieTableView.getItems().remove(selectedMovie);
-            movieSet.remove(selectedMovie);
-            welcomeText.setText("Movie removed: " + selectedMovie.getName());
-        } else {
-            welcomeText.setText("Please select a movie to remove!");
-        }
-    }
-
-    @FXML
-    protected void onEditButtonClick() {
-        Movie selectedMovie = movieTableView.getSelectionModel().getSelectedItem();
-        if (selectedMovie != null) {
-            Dialog<Movie> dialog = new Dialog<>();
-            dialog.setTitle("Edit Movie");
-            dialog.setHeaderText("Edit Movie Details");
-
-            // Set the button types
-            ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
-
-            // Create the movie details form
-            GridPane gridPane = new GridPane();
-            gridPane.setHgap(10);
-            gridPane.setVgap(10);
-            gridPane.setPadding(new Insets(20, 150, 10, 10));
-
-            TextField nameField = new TextField();
-            nameField.setPromptText("Name");
-            nameField.setText(selectedMovie.getName());
-            TextField releaseField = new TextField();
-            releaseField.setPromptText("Release Year");
-            releaseField.setText(String.valueOf(selectedMovie.getYear()));
-            ComboBox<String> genreComboBox = new ComboBox<>();
-            genreComboBox.setPromptText("Genre");
-            genreComboBox.getItems().addAll(
-                    "Action",
-                    "Adventure",
-                    "Comedy",
-                    "Drama",
-                    "Fantasy",
-                    "Horror",
-                    "Romance",
-                    "Sci-Fi",
-                    "Thriller"
-            );
-            genreComboBox.setValue(selectedMovie.getGenre());
-
-            gridPane.add(new Label("Name:"), 0, 0);
-            gridPane.add(nameField, 1, 0);
-            gridPane.add(new Label("Release Year:"), 0, 1);
-            gridPane.add(releaseField, 1, 1);
-            gridPane.add(new Label("Genre:"), 0, 2);
-            gridPane.add(genreComboBox, 1, 2);
-
-            dialog.getDialogPane().setContent(gridPane);
-
-            // Request focus on the name field by default
-            Platform.runLater(nameField::requestFocus);
-
-            // Convert the result to a movie object when the save button is clicked
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == saveButtonType) {
-                    String name = nameField.getText();
-                    String releaseStr = releaseField.getText();
-                    String genre = genreComboBox.getValue();
-
-                    if (!name.isEmpty() && !releaseStr.isEmpty() && genre != null) {
-                        try {
-                            int release = Integer.parseInt(releaseStr);
-                            if (release >= 1000 && release <= 3000) {
-                                return new Movie(name, release, genre);
-                            } else {
-                                System.out.println("Invalid release year!");
-                            }
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid release year! Please enter a 4-digit number.");
-                        }
-                    } else {
-                        System.out.println("Please enter movie details!");
-                    }
-                }
-                return null;
-            });
-
-            Optional<Movie> result = dialog.showAndWait();
-            result.ifPresent(updatedMovie -> {
-                int selectedIndex = movieTableView.getSelectionModel().getSelectedIndex();
-                movieTableView.getItems().set(selectedIndex, updatedMovie);
-                movieSet.remove(selectedMovie);
-                movieSet.add(updatedMovie);
-                welcomeText.setText("Movie updated: " + updatedMovie.getName());
-            });
-        } else {
-            welcomeText.setText("Please select a movie to update!");
-        }
-    }
-
-    @FXML
     protected void onNewSessionClicked() {
         // Show the session container
         sessionContainer.setVisible(true);
@@ -468,5 +507,4 @@ public class MovieController {
         Stage stage = (Stage) welcomeText.getScene().getWindow();
         stage.close();
     }
-
 }
