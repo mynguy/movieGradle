@@ -7,7 +7,7 @@
  */
 package org.cirdles;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -112,23 +112,18 @@ public class Movie implements Comparable<Movie>, Serializable {
     public int hashCode() {
         return Objects.hash(name, genre, release);
     }
+
+    @XmlElement
     public String getName() {
         return name;
     }
+    @XmlElement
     public String getGenre() {
         return genre;
     }
+    @XmlElement
     public int getYear() {
         return release;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-    public void setYear(int release) {
-        this.release = release;
     }
 }
 

@@ -3,27 +3,28 @@ package org.cirdles;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Set;
 import java.util.TreeSet;
 
-@XmlRootElement
+@XmlRootElement(name = "movies")
 public class MovieSetWrapper {
-    private TreeSet<Movie> movieSet;
 
-    // Default constructor for JAXB
+    private Set<Movie> movieSet;
+
     public MovieSetWrapper() {
+        this.movieSet = new TreeSet<>();
     }
 
-    public MovieSetWrapper(TreeSet<Movie> movieSet) {
+    public MovieSetWrapper(Set<Movie> movieSet) {
         this.movieSet = movieSet;
     }
 
-    @XmlElementWrapper(name = "movies")
     @XmlElement(name = "movie")
-    public TreeSet<Movie> getMovieSet() {
+    public Set<Movie> getMovieSet() {
         return movieSet;
     }
 
-    public void setMovieSet(TreeSet<Movie> movieSet) {
+    public void setMovieSet(Set<Movie> movieSet) {
         this.movieSet = movieSet;
     }
 }

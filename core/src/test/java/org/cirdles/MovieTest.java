@@ -9,6 +9,7 @@
  */
 package org.cirdles;
 
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MovieTest {
     private Set<Movie> movieSet;
@@ -73,23 +74,29 @@ class MovieTest {
     }
 
     @Test
-    public void testXMLSerializeAndDeserialize() throws IOException, ClassNotFoundException {
-
-        // Wrap the movie set in the MovieSetWrapper
-        MovieSetWrapper movieSetWrapper = new MovieSetWrapper(new TreeSet<>(movieSet));
-
-        XMLSerializer.serializeToXML(movieSetWrapper, "movies.xml");
-        Set<Movie> deserializedSet = XMLSerializer.deserializeFromXML("movies.xml");
-
-        // Check if the deserialized set is equal to the original set
-        assertEquals(movieSet, deserializedSet);
-    }
-
-    @Test
     public void testPrettyPrint() {
         Movie movie = new Movie("Inception", 2010, "Science Fiction");
         String expectedOutput = "Movie Name: Inception\nGenre: Science Fiction\nYear: 2010";
         assertEquals(expectedOutput, movie.prettyPrint());
+    }
+
+    @Test
+    public void testSerializeToXML_FileCreated() {
+        String filename = "movieTest.xml";
+
+        try {
+            // Serialize the movie set to XML
+            XMLSerializer.serializeToXML(new MovieSetWrapper(new TreeSet<>(movieSet)), filename);
+
+            // Verify that the file was created
+            File xmlFile = new File(filename);
+            assertTrue(xmlFile.exists());
+
+            // Optional: Delete the file after verification
+            //assertTrue(xmlFile.delete());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

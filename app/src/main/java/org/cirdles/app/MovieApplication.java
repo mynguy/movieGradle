@@ -19,7 +19,6 @@ public class MovieApplication extends Application {
         controller.setHostServices(getHostServices());
 
         Scene scene = new Scene(root);
-
         primaryStage.setTitle("Movie Serialization");
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(320);

@@ -16,12 +16,13 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.cirdles.*;
+import org.cirdles.MovieSetWrapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class MovieController {
 
@@ -57,7 +58,7 @@ public class MovieController {
     private Set<Movie> movieSet;
 
     public MovieController() {
-        movieSet = new HashSet<>();
+        movieSet = new TreeSet<>();
     }
 
     public void initialize() {
@@ -73,6 +74,7 @@ public class MovieController {
 
         // Populate genre options
         genreComboBox.getItems().addAll(
+                "Select genre",
                 "Action",
                 "Adventure",
                 "Comedy",
@@ -144,18 +146,18 @@ public class MovieController {
             try {
                 int release = Integer.parseInt(releaseStr);
                 if (release >= 1000 && release <= 3000) {
-                    Movie movie = new Movie(name, release, genre);
-                    movieSet.add(movie);
-                    movieTableView.getItems().add(movie); // Add movie to the TableView
-                    welcomeText.setText("Movie added: " + movie.getName());
-                    nameField.clear();
-                    releaseField.clear();
+                    if (genre != null && !genre.equals("Select genre")) {
+                        Movie movie = new Movie(name, release, genre);
+                        movieSet.add(movie);
+                        movieTableView.getItems().add(movie); // Add movie to the TableView
+                        welcomeText.setText("Movie added: " + movie.getName());
+                        nameField.clear();
+                        releaseField.clear();
 
-                    // Check if "Select genre" already exists in the dropdown
-                    if (!genreComboBox.getItems().contains("Select genre")) {
-                        genreComboBox.getItems().add(0, "Select genre"); // Add "Select genre" at the beginning
+                        genreComboBox.getSelectionModel().select("Select genre");
+                    } else {
+                        welcomeText.setText("Please select a valid genre!");
                     }
-                    genreComboBox.getSelectionModel().select("Select genre"); // Select "Select genre"
                 } else {
                     welcomeText.setText("Invalid release year!");
                 }
@@ -270,12 +272,13 @@ public class MovieController {
 
                 if (file != null) {
                     String filename = file.getPath();
-                    XMLSerializer.serializeToXML(movieSet, filename);
-                    welcomeText.setText("Movie data exported as XML!");
+                    MovieSetWrapper movieSetWrapper = new MovieSetWrapper((TreeSet<Movie>) movieSet);
+                    XMLSerializer.serializeToXML(movieSetWrapper, filename);
+                    welcomeText.setText("Movie data saved as XML!");
                 }
             } catch (IOException e) {
-                e.printStackTrace(); // Print the exception stack trace for debugging
-                welcomeText.setText("Error occurred while saving movies as XML!");
+                e.printStackTrace(); // Print the stack trace for detailed error information
+                welcomeText.setText("Error occurred while saving movies as XML. See console for details.");
             }
         } else {
             welcomeText.setText("No movies to save!");
@@ -459,6 +462,7 @@ public class MovieController {
             } catch (IOException e) {
                 welcomeText.setText("Error occurred while loading movie set from CSV file!");
             }
+
         }
         // Reset genreComboBox
         genreComboBox.setValue(null);

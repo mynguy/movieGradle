@@ -14,7 +14,7 @@ import java.util.Set;
 public class XMLSerializer {
 
     /**
-     * Serializes an object to XML format using JAXB.
+     * Serializes an object to XML format using JAXB and saves it to a file.
      *
      * @param object   the object to serialize
      * @param filename the name of the XML file to create
@@ -25,7 +25,9 @@ public class XMLSerializer {
             JAXBContext context = JAXBContext.newInstance(object.getClass());
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(object, new File(filename));
+
+            File file = new File(filename);
+            marshaller.marshal(object, file);
         } catch (JAXBException e) {
             throw new IOException("Error occurred during XML serialization.", e);
         }
@@ -43,7 +45,8 @@ public class XMLSerializer {
         try {
             JAXBContext context = JAXBContext.newInstance(MovieSetWrapper.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            MovieSetWrapper movieSetWrapper = (MovieSetWrapper) unmarshaller.unmarshal(new File(filename));
+            File file = new File(filename);
+            MovieSetWrapper movieSetWrapper = (MovieSetWrapper) unmarshaller.unmarshal(file);
             return movieSetWrapper.getMovieSet();
         } catch (JAXBException e) {
             throw new IOException("Error occurred during XML deserialization.", e);

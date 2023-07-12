@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movies>
+    <movie>
+        <genre>Horror</genre>
+        <name>Hereditary</name>
+        <year>2018</year>
+    </movie>
+    <movie>
+        <genre>Science Fiction</genre>
+        <name>Inception</name>
+        <year>2010</year>
+    </movie>
+    <movie>
+        <genre>Action</genre>
+        <name>John Wick</name>
+        <year>2014</year>
+    </movie>
+    <movie>
+        <genre>Horror</genre>
+        <name>The Conjuring</name>
+        <year>2013</year>
+    </movie>
+    <movie>
+        <genre>Action</genre>
+        <name>The Dark Knight</name>
+        <year>2008</year>
+    </movie>
+    <movie>
+        <genre>Drama</genre>
+        <name>The Shawshank Redemption</name>
+        <year>1994</year>
+    </movie>
+</movies>
