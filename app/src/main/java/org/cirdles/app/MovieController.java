@@ -388,8 +388,7 @@ public class MovieController {
             }
         }
         // Reset genreComboBox
-        genreComboBox.setValue(null);
-        genreComboBox.setPromptText("Select genre");
+        genreComboBox.getSelectionModel().select("Select genre");
     }
 
     @FXML
@@ -426,8 +425,7 @@ public class MovieController {
             }
         }
         // Reset genreComboBox
-        genreComboBox.setValue(null);
-        genreComboBox.setPromptText("Select genre");
+        genreComboBox.getSelectionModel().select("Select genre");
     }
 
     @FXML
@@ -465,8 +463,7 @@ public class MovieController {
 
         }
         // Reset genreComboBox
-        genreComboBox.setValue(null);
-        genreComboBox.setPromptText("Select genre");
+        genreComboBox.getSelectionModel().select("Select genre");
     }
 
     @FXML
@@ -477,7 +474,7 @@ public class MovieController {
         // Clear the input fields
         nameField.clear();
         releaseField.clear();
-        genreComboBox.setValue(null);
+        genreComboBox.getSelectionModel().select("Select genre");
 
         // Clear the movie table view
         movieTableView.getItems().clear();
