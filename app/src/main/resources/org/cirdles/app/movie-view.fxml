@@ -32,6 +32,7 @@
         <Menu text="Session">
           <items>
             <MenuItem onAction="#onNewSessionClicked" text="Start New Session" />
+            <MenuItem onAction="#openDemonstrationSessionMenuItemAction" text="Open Demonstration Session" />
             <MenuItem onAction="#onCloseSessionClicked" text="Close Session" />
             <MenuItem onAction="#onQuitClicked" text="Quit" />
           </items>
@@ -82,9 +83,9 @@
         </columns>
       </TableView>
       <Label fx:id="welcomeText1" alignment="CENTER" prefHeight="7.0" prefWidth="309.0" textAlignment="CENTER" />
-         <padding>
-            <Insets left="5.0" right="5.0" />
-         </padding>
+      <padding>
+        <Insets left="5.0" right="5.0" />
+      </padding>
     </VBox>
   </VBox>
 </StackPane>

@@ -14,17 +14,6 @@ dependencies {
     implementation project(path: ':core')
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-
-    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
-    implementation("javax.xml.bind:jaxb-api:2.3.1")
-
-    implementation("org.glassfish.jaxb:jaxb-runtime:3.0.1")
-    // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
-
-    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl
-    implementation("com.sun.xml.bind:jaxb-impl:3.0.2-b01")
-
 }
 
 test {

@@ -3,6 +3,8 @@ package org.cirdles.app;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,9 +19,17 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.cirdles.*;
 import org.cirdles.MovieSetWrapper;
+import org.cirdles.utilities.file.MovieFileResources;
+import org.cirdles.values.MovieConstants;
+import org.cirdles.values.MovieLibrary;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -54,6 +64,8 @@ public class MovieController {
     private VBox sessionContainer;
     @FXML
     private ImageView logoImageView;
+    @FXML
+    private Label statusLabel;
 
     private Set<Movie> movieSet;
 
@@ -508,4 +520,34 @@ public class MovieController {
         Stage stage = (Stage) welcomeText.getScene().getWindow();
         stage.close();
     }
+
+    @FXML
+    public void openDemonstrationSessionMenuItemAction() {
+        String csvFilePath = "core\\src\\main\\resources\\org.cirdles\\movieSetExample.csv";
+
+        try {
+            Set<Movie> loadedMovieSet = Movie.deserializeSetFromCSV(csvFilePath);
+            if (loadedMovieSet != null && !loadedMovieSet.isEmpty()) {
+                movieSet = loadedMovieSet;
+                movieTableView.getItems().clear();
+                movieTableView.getItems().addAll(movieSet);
+                welcomeText.setText("Movie set loaded from CSV");
+
+                // Hide the logo
+                logoImageView.setVisible(false);
+
+                // Show the session container
+                sessionContainer.setVisible(true);
+            } else {
+                welcomeText.setText("Invalid movie set in the CSV file!");
+            }
+        } catch (IOException e) {
+            welcomeText.setText("Error occurred while loading movie set from CSV file!");
+            e.printStackTrace(); // Print the stack trace
+        }
+
+        // Reset genreComboBox
+        genreComboBox.getSelectionModel().select("Select genre");
+    }
+
 }
