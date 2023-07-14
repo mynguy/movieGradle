@@ -3,8 +3,6 @@ package org.cirdles.app;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,17 +17,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.cirdles.*;
 import org.cirdles.MovieSetWrapper;
-import org.cirdles.utilities.file.MovieFileResources;
-import org.cirdles.values.MovieConstants;
-import org.cirdles.values.MovieLibrary;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -350,25 +340,19 @@ public class MovieController {
     @FXML
     protected void onHelpButtonClick() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Help");
+        alert.setTitle("About");
         alert.setHeaderText("Movie Application");
 
         VBox content = new VBox();
         content.setSpacing(10);
 
-        Text helpText = new Text("This is the help documentation for the Movie Application.\n\n" +
+        Text helpText = new Text("About\n\n" +
                 "Enter the details of a movie in the respective fields and select a genre from the dropdown menu. " +
                 "\nClick 'Add Movie' to add it to the collection. Click 'Edit' to edit a movie's data.\n" +
                 "Once you have added multiple movies, use the 'Save as' buttons to save the movie data as CSV, XML, or Binary.\n");
 
-        Button readmeButton = new Button("Link to Documentation");
-        readmeButton.setOnAction(e -> {
-            // Open the link in the default browser
-            hostServices.showDocument("https://github.com/mynguy/movieGradle/blob/main/README.md");
-        });
-
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(helpText, readmeButton);
+        vbox.getChildren().add(helpText);
         content.getChildren().add(vbox);
 
         alert.getDialogPane().setContent(content);
@@ -549,5 +533,12 @@ public class MovieController {
         // Reset genreComboBox
         genreComboBox.getSelectionModel().select("Select genre");
     }
+
+    @FXML
+    protected void openDocumentation() {
+        hostServices.showDocument("https://github.com/mynguy/movieGradle/blob/main/README.md");
+    }
+
+
 
 }
