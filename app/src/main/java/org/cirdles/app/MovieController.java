@@ -4,25 +4,17 @@ import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.stage.*;
 import org.cirdles.*;
-import org.cirdles.MovieSetWrapper;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.io.*;
+import java.util.*;
 
 public class MovieController {
 
@@ -346,7 +338,7 @@ public class MovieController {
         VBox content = new VBox();
         content.setSpacing(10);
 
-        Text helpText = new Text("About\n\n" +
+        Text helpText = new Text("Information\n\n" +
                 "Enter the details of a movie in the respective fields and select a genre from the dropdown menu. " +
                 "\nClick 'Add Movie' to add it to the collection. Click 'Edit' to edit a movie's data.\n" +
                 "Once you have added multiple movies, use the 'Save as' buttons to save the movie data as CSV, XML, or Binary.\n");
