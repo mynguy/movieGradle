@@ -18,9 +18,32 @@ dependencies {
     // https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime
     implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.1'
 
+/*
+
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
+    implementation("org.glassfish.jaxb:jaxb-runtime:4.0.2")
+
+    // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
+    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl
+    implementation("com.sun.xml.bind:jaxb-impl:4.0.2")
+    // https://mvnrepository.com/ar
+*/
+
+/* --TOP IS TRIPOLI--TESTING --BELOW IS SQUID-- */
+
+/*
+    implementation "com.sun.activation:javax.activation:1.2.0"
+    implementation "javax.xml.bind:jaxb-api:2.3.1"
+    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-core', version: '3.0.2'
+    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.1'
+
+*/
+
 }
-
-
 
 test {
     useJUnitPlatform()

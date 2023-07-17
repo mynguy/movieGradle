@@ -30,11 +30,11 @@
   <VBox spacing="8" StackPane.alignment="TOP_CENTER">
     <MenuBar>
       <menus>
-        <Menu text="Session">
+        <Menu text="Movie Library">
           <items>
-            <MenuItem onAction="#onNewSessionClicked" text="Start New Session" />
-            <MenuItem onAction="#openDemonstrationSessionMenuItemAction" text="Open Demonstration Session" />
-            <MenuItem onAction="#onCloseSessionClicked" text="Close Session" />
+            <MenuItem onAction="#onNewSessionClicked" text="Start New Library" />
+            <MenuItem onAction="#openDemonstrationSessionMenuItemAction" text="Open Demonstration Library" />
+            <MenuItem onAction="#onCloseSessionClicked" text="Close Library" />
             <SeparatorMenuItem />
             <MenuItem onAction="#onQuitClicked" text="Quit" />
           </items>

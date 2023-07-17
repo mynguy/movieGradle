@@ -266,7 +266,7 @@ public class MovieController {
 
                 if (file != null) {
                     String filename = file.getPath();
-                    MovieSetWrapper movieSetWrapper = new MovieSetWrapper((TreeSet<Movie>) movieSet);
+                    MovieSetWrapper movieSetWrapper = new MovieSetWrapper(movieSet);
                     XMLSerializer.serializeToXML(movieSetWrapper, filename);
                     welcomeText.setText("Movie data saved as XML!");
                 }
@@ -499,7 +499,7 @@ public class MovieController {
 
     @FXML
     public void openDemonstrationSessionMenuItemAction() {
-        String csvFilePath = "core\\src\\main\\resources\\org.cirdles\\movieSetExample.csv";
+        String csvFilePath = "core//src//main//resources//org.cirdles//movieSetExample.csv";
 
         try {
             Set<Movie> loadedMovieSet = Movie.deserializeSetFromCSV(csvFilePath);
