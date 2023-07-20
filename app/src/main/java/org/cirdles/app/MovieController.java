@@ -498,35 +498,24 @@ public class MovieController {
     }
 
     @FXML
-    public void openDemonstrationSessionMenuItemAction() {
+    public void openDemonstrationSessionMenuItemAction() throws IOException {
         String csvFilePath = "core//src//main//resources//org.cirdles//movieSetExample.csv";
 
-        try {
-            Set<Movie> loadedMovieSet = Movie.deserializeSetFromCSV(csvFilePath);
-            if (loadedMovieSet != null && !loadedMovieSet.isEmpty()) {
-                movieSet = loadedMovieSet;
-                movieTableView.getItems().clear();
-                movieTableView.getItems().addAll(movieSet);
-                welcomeText.setText("Movie set loaded from CSV");
+        movieSet = Movie.deserializeSetFromCSV(csvFilePath);
+        movieTableView.getItems().clear();
+        movieTableView.getItems().addAll(movieSet);
+        welcomeText.setText("Movie set loaded from CSV");
 
-                // Hide the logo
-                logoImageView.setVisible(false);
-
-                // Show the session container
-                sessionContainer.setVisible(true);
-            } else {
-                welcomeText.setText("Invalid movie set in the CSV file!");
-            }
-        } catch (IOException e) {
-            welcomeText.setText("Error occurred while loading movie set from CSV file!");
-            e.printStackTrace(); // Print the stack trace
-        }
+        // Hide the logo
+        logoImageView.setVisible(false);
+        // Show the session container
+        sessionContainer.setVisible(true);
 
         // Reset genreComboBox
         genreComboBox.getSelectionModel().select("Select genre");
     }
 
-    @FXML
+        @FXML
     protected void openDocumentation() {
         hostServices.showDocument("https://github.com/mynguy/movieGradle/blob/main/README.md");
     }
