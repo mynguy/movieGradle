@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import org.cirdles.*;
+import org.cirdles.utilities.file.MovieFileResources;
 
 import java.io.*;
 import java.util.*;
@@ -480,13 +481,10 @@ public class MovieController {
         releaseField.clear();
         genreComboBox.setValue(null);
 
-        // Clear the movie table view
         movieTableView.getItems().clear();
 
-        // Show the logo
         logoImageView.setVisible(true);
 
-        // Clear the welcomeText label
         welcomeText.setText("");
     }
 
@@ -498,28 +496,33 @@ public class MovieController {
     }
 
     @FXML
-    public void openDemonstrationSessionMenuItemAction() throws IOException {
-        String csvFilePath = "core//src//main//resources//org.cirdles//movieSetExample.csv";
+    public void openDemonstrationSessionMenuItemAction() {
+        try {
+            MovieFileResources.initLocalResources();
 
-        movieSet = Movie.deserializeSetFromCSV(csvFilePath);
-        movieTableView.getItems().clear();
-        movieTableView.getItems().addAll(movieSet);
-        welcomeText.setText("Movie set loaded from CSV");
+            String csvFilePath = "MovieResources/movieSetExample.csv";
 
-        // Hide the logo
-        logoImageView.setVisible(false);
-        // Show the session container
-        sessionContainer.setVisible(true);
+            // Load the movieSetExample.csv file from the resources folder
+            movieSet = Movie.deserializeSetFromCSV(csvFilePath);
 
-        // Reset genreComboBox
-        genreComboBox.getSelectionModel().select("Select genre");
+            movieTableView.getItems().clear();
+            movieTableView.getItems().addAll(movieSet);
+            welcomeText.setText("Movie set loaded from CSV");
+
+            logoImageView.setVisible(false);
+            sessionContainer.setVisible(true);
+
+            // Reset genreComboBox
+            genreComboBox.getSelectionModel().select("Select genre");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-        @FXML
+    @FXML
     protected void openDocumentation() {
         hostServices.showDocument("https://github.com/mynguy/movieGradle/blob/main/README.md");
     }
-
-
-
 }
