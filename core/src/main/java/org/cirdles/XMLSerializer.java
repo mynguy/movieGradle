@@ -52,4 +52,9 @@ public class XMLSerializer {
             throw new IOException("Error occurred during XML deserialization.", e);
         }
     }
+
+    public static String convertXMLtoString(MovieSetWrapper set, String filename) throws IOException {
+        serializeToXML(set, filename);
+        return "Hi";
+    }
 }

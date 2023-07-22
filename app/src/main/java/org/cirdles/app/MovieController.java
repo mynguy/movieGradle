@@ -268,11 +268,23 @@ public class MovieController {
                 if (file != null) {
                     String filename = file.getPath();
                     MovieSetWrapper movieSetWrapper = new MovieSetWrapper(movieSet);
-                    XMLSerializer.serializeToXML(movieSetWrapper, filename);
-                    welcomeText.setText("Movie data saved as XML!");
+
+                    // Perform the serialization on the JavaFX Application Thread
+                    Platform.runLater(() -> {
+                        try {
+
+                            // Below is the line that is giving a lot of issue
+                            XMLSerializer.serializeToXML(movieSetWrapper, filename);
+
+                            welcomeText.setText("Movie data saved as XML!");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            welcomeText.setText("Error occurred while saving movies as XML. See console for details.");
+                        }
+                    });
                 }
-            } catch (IOException e) {
-                e.printStackTrace(); // Print the stack trace for detailed error information
+            } catch (Exception e) {
+                e.printStackTrace();
                 welcomeText.setText("Error occurred while saving movies as XML. See console for details.");
             }
         } else {
