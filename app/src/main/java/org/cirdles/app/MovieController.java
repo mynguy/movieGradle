@@ -90,7 +90,7 @@ public class MovieController {
         actionColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("Edit");
-            private final Button removeButton = new Button("Remove");
+            private final Button removeButton = new Button("X");
 
             {
                 editButton.setOnAction(event -> {
