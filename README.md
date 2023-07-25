@@ -1,3 +1,29 @@
+### README:
+
+## Prerequisites
+Before you begin, make sure you have the following software installed on your system:
+
+# Liberica JDK 17 (BellSoft) or a compatible version
+Step 1: Download Liberica JDK 17
+Download Liberica JDK 17 (BellSoft) from the BellSoft website: Download Liberica JDK 17.
+Follow the installation instructions for your operating system to complete the JDK installation.
+
+# Step 2: Configure JDK in IntelliJ IDEA (or Preferred IDE)
+Open IntelliJ IDEA (or your preferred IDE).
+Open the cloned project by selecting "File" -> "Open" and navigating to the project directory.
+In IntelliJ IDEA, configure the JDK for the project:
+
+Go to "File" -> "Project Structure" -> "Project."
+Make sure the "Project SDK" drop-down menu is set to Liberica JDK 17 (or the compatible version you installed).
+Click "Apply" and then "OK" to save the JDK configuration.
+
+# Step 3: Run the GUI Application
+In IntelliJ IDEA, locate and open the MovieApplication.java file.
+Right-click within the MovieApplication class and select "Run 'MovieApplication.main()'." This will launch the GUI application.
+The GUI window will appear, providing input fields for entering movie details (name, release year, and genre).
+Use the "Add Movie" button to add a movie to the movie set.
+Use the "Save Movies" button to save the movie set to a CSV file and serialize it to binary and XML formats.
+For more information and instructions about the application, click the "Help" button to display a dialog box.
 
 # Serialization and Deserialization of Movie Sets
 
