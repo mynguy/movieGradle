@@ -388,7 +388,6 @@ public class MovieController {
                 e.printStackTrace();
             }
         }
-        // Reset genreComboBox
         genreComboBox.getSelectionModel().select("Select genre");
     }
 
@@ -425,7 +424,6 @@ public class MovieController {
                 welcomeText.setText("Error occurred while loading movie set from Binary file!");
             }
         }
-        // Reset genreComboBox
         genreComboBox.getSelectionModel().select("Select genre");
     }
 
@@ -463,25 +461,23 @@ public class MovieController {
             }
 
         }
-        // Reset genreComboBox
         genreComboBox.getSelectionModel().select("Select genre");
     }
 
     @FXML
     protected void onNewSessionClicked() {
-        // Show the session container
+
         sessionContainer.setVisible(true);
 
-        // Clear the input fields
         nameField.clear();
         releaseField.clear();
         genreComboBox.getSelectionModel().select("Select genre");
 
-        // Clear the movie table view
         movieTableView.getItems().clear();
 
-        // Hide the logo when "Start New Session" button is clicked
         logoImageView.setVisible(false);
+
+        welcomeText.setText("");
     }
 
     @FXML
@@ -502,7 +498,6 @@ public class MovieController {
 
     @FXML
     protected void onQuitClicked() {
-        // Get the current stage and close the application
         Stage stage = (Stage) welcomeText.getScene().getWindow();
         stage.close();
     }
