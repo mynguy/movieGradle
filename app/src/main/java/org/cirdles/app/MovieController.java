@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import org.cirdles.*;
+import org.cirdles.app.utilities.GenreOptionsUtil;
 import org.cirdles.utilities.file.MovieFileResources;
 
 import java.io.*;
@@ -47,8 +48,6 @@ public class MovieController {
     private VBox sessionContainer;
     @FXML
     private ImageView logoImageView;
-    @FXML
-    private Label statusLabel;
 
     private Set<Movie> movieSet;
 
@@ -57,36 +56,18 @@ public class MovieController {
     }
 
     public void initialize() {
-        // Removing focus
-        nameField.setFocusTraversable(false);
-        releaseField.setFocusTraversable(false);
 
-        // Set minimum width for the columns
         actionColumn.setMinWidth(100);
         genreColumn.setMinWidth(35);
         releaseYearColumn.setMinWidth(65);
         nameColumn.setMinWidth(50);
 
-        // Populate genre options
-        genreComboBox.getItems().addAll(
-                "Select genre",
-                "Action",
-                "Adventure",
-                "Comedy",
-                "Drama",
-                "Fantasy",
-                "Horror",
-                "Romance",
-                "Sci-Fi",
-                "Thriller"
-        );
+        genreComboBox.getItems().addAll(GenreOptionsUtil.getGenreOptions());
 
-        // Initialize TableView columns
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
 
-        // Initialize action column
         actionColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("Edit");
@@ -119,7 +100,6 @@ public class MovieController {
             }
         });
 
-        // Populate TableView with movieSet data
         movieTableView.getItems().addAll(movieSet);
 
         // Disable column sorting arrows
@@ -169,7 +149,6 @@ public class MovieController {
         dialog.setTitle("Edit Movie");
         dialog.setHeaderText("Edit Movie Details");
 
-        // Set the button types
         ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
 
@@ -187,17 +166,7 @@ public class MovieController {
         releaseField.setText(String.valueOf(movie.getYear()));
         ComboBox<String> genreComboBox = new ComboBox<>();
         genreComboBox.setPromptText("Genre");
-        genreComboBox.getItems().addAll(
-                "Action",
-                "Adventure",
-                "Comedy",
-                "Drama",
-                "Fantasy",
-                "Horror",
-                "Romance",
-                "Sci-Fi",
-                "Thriller"
-        );
+        genreComboBox.getItems().addAll(GenreOptionsUtil.getGenreOptions());
         genreComboBox.setValue(movie.getGenre());
 
         gridPane.add(new Label("Name:"), 0, 0);
@@ -209,7 +178,6 @@ public class MovieController {
 
         dialog.getDialogPane().setContent(gridPane);
 
-        // Request focus on the name field by default
         Platform.runLater(nameField::requestFocus);
 
         // Convert the result to a movie object when the save button is clicked
@@ -468,6 +436,7 @@ public class MovieController {
     protected void onNewSessionClicked() {
 
         sessionContainer.setVisible(true);
+        sessionContainer.requestFocus();
 
         nameField.clear();
         releaseField.clear();
@@ -505,6 +474,8 @@ public class MovieController {
     @FXML
     public void openDemonstrationSessionMenuItemAction() {
         try {
+            sessionContainer.requestFocus();
+
             MovieFileResources.initLocalResources();
 
             String csvFilePath = "MovieResources/movieSetExample.csv";
