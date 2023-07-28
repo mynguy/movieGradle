@@ -12,7 +12,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import org.cirdles.*;
-import org.cirdles.app.utilities.GenreOptionsUtil;
+import org.cirdles.app.utilities.GenreOptions;
+import org.cirdles.app.utilities.MovieEditor;
 import org.cirdles.utilities.file.MovieFileResources;
 
 import java.io.*;
@@ -50,6 +51,7 @@ public class MovieController {
     private ImageView logoImageView;
 
     private Set<Movie> movieSet;
+    private MovieEditor movieEditor;
 
     public MovieController() {
         movieSet = new TreeSet<>();
@@ -57,12 +59,15 @@ public class MovieController {
 
     public void initialize() {
 
+        movieEditor = new MovieEditor(movieTableView, movieSet, welcomeText);
+        movieEditor.setMovieTableView(movieTableView);
+
         actionColumn.setMinWidth(100);
         genreColumn.setMinWidth(35);
         releaseYearColumn.setMinWidth(65);
         nameColumn.setMinWidth(50);
 
-        genreComboBox.getItems().addAll(GenreOptionsUtil.getGenreOptions());
+        genreComboBox.getItems().addAll(GenreOptions.getGenreOptions());
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
@@ -76,12 +81,12 @@ public class MovieController {
             {
                 editButton.setOnAction(event -> {
                     Movie movie = getTableView().getItems().get(getIndex());
-                    handleEditMovie(movie);
+                    movieEditor.handleEditMovie(movie);
                 });
 
                 removeButton.setOnAction(event -> {
                     Movie movie = getTableView().getItems().get(getIndex());
-                    handleRemoveMovie(movie);
+                    movieEditor.handleRemoveMovie(movie);
                 });
             }
 
@@ -102,15 +107,10 @@ public class MovieController {
 
         movieTableView.getItems().addAll(movieSet);
 
-        // Disable column sorting arrows
-        nameColumn.setSortNode(null);
-        releaseYearColumn.setSortNode(null);
-        genreColumn.setSortNode(null);
-
-        // Adjust input box padding
         nameField.setStyle("-fx-padding: 5;");
         releaseField.setStyle("-fx-padding: 5;");
     }
+
     @FXML
     protected void addMovieButtonClicked() {
         String name = nameField.getText();
@@ -142,83 +142,6 @@ public class MovieController {
         } else {
             welcomeText.setText("Please enter movie details!");
         }
-    }
-
-    private void handleEditMovie(Movie movie) {
-        Dialog<Movie> dialog = new Dialog<>();
-        dialog.setTitle("Edit Movie");
-        dialog.setHeaderText("Edit Movie Details");
-
-        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
-
-        // Create the movie details form
-        GridPane gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setPadding(new Insets(20, 150, 10, 10));
-
-        TextField nameField = new TextField();
-        nameField.setPromptText("Name");
-        nameField.setText(movie.getName());
-        TextField releaseField = new TextField();
-        releaseField.setPromptText("Release Year");
-        releaseField.setText(String.valueOf(movie.getYear()));
-        ComboBox<String> genreComboBox = new ComboBox<>();
-        genreComboBox.setPromptText("Genre");
-        genreComboBox.getItems().addAll(GenreOptionsUtil.getGenreOptions());
-        genreComboBox.setValue(movie.getGenre());
-
-        gridPane.add(new Label("Name:"), 0, 0);
-        gridPane.add(nameField, 1, 0);
-        gridPane.add(new Label("Release Year:"), 0, 1);
-        gridPane.add(releaseField, 1, 1);
-        gridPane.add(new Label("Genre:"), 0, 2);
-        gridPane.add(genreComboBox, 1, 2);
-
-        dialog.getDialogPane().setContent(gridPane);
-
-        Platform.runLater(nameField::requestFocus);
-
-        // Convert the result to a movie object when the save button is clicked
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == saveButtonType) {
-                String name = nameField.getText();
-                String releaseStr = releaseField.getText();
-                String genre = genreComboBox.getValue();
-
-                if (!name.isEmpty() && !releaseStr.isEmpty() && genre != null) {
-                    try {
-                        int release = Integer.parseInt(releaseStr);
-                        if (release >= 1000 && release <= 3000) {
-                            return new Movie(name, release, genre);
-                        } else {
-                            System.out.println("Invalid release year!");
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid release year! Please enter a 4-digit number.");
-                    }
-                } else {
-                    System.out.println("Please enter movie details!");
-                }
-            }
-            return null;
-        });
-
-        Optional<Movie> result = dialog.showAndWait();
-        result.ifPresent(updatedMovie -> {
-            int selectedIndex = movieTableView.getItems().indexOf(movie);
-            movieTableView.getItems().set(selectedIndex, updatedMovie);
-            movieSet.remove(movie);
-            movieSet.add(updatedMovie);
-            welcomeText.setText("Movie updated: " + updatedMovie.getName());
-        });
-    }
-
-    private void handleRemoveMovie(Movie movie) {
-        movieSet.remove(movie);
-        movieTableView.getItems().remove(movie);
-        welcomeText.setText("Movie removed: " + movie.getName());
     }
 
     @FXML
