@@ -30,26 +30,21 @@ public class MovieController {
     @FXML
     private Label welcomeText;
     @FXML
-    private TextField nameField;
-    @FXML
-    private TextField releaseField;
+    private TextField nameField, releaseField;
     @FXML
     private ComboBox<String> genreComboBox;
     @FXML
     private TableView<Movie> movieTableView;
     @FXML
-    private TableColumn<Movie, String> nameColumn;
+    private TableColumn<Movie, String> nameColumn, genreColumn;
     @FXML
     private TableColumn<Movie, Integer> releaseYearColumn;
-    @FXML
-    private TableColumn<Movie, String> genreColumn;
     @FXML
     private TableColumn<Movie, Movie> actionColumn;
     @FXML
     private VBox sessionContainer;
     @FXML
     private ImageView logoImageView;
-
     private Set<Movie> movieSet;
     private MovieEditor movieEditor;
 
@@ -61,11 +56,6 @@ public class MovieController {
 
         movieEditor = new MovieEditor(movieTableView, movieSet, welcomeText);
         movieEditor.setMovieTableView(movieTableView);
-
-        actionColumn.setMinWidth(100);
-        genreColumn.setMinWidth(35);
-        releaseYearColumn.setMinWidth(65);
-        nameColumn.setMinWidth(50);
 
         genreComboBox.getItems().addAll(GenreOptions.getGenreOptions());
 
@@ -107,8 +97,6 @@ public class MovieController {
 
         movieTableView.getItems().addAll(movieSet);
 
-        nameField.setStyle("-fx-padding: 5;");
-        releaseField.setStyle("-fx-padding: 5;");
     }
 
     @FXML
