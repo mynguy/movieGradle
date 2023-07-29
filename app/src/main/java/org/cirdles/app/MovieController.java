@@ -291,10 +291,8 @@ public class MovieController {
                     movieTableView.getItems().addAll(movieSet);
                     welcomeText.setText("Movie set loaded from Binary");
 
-                    // Hide the logo
                     logoImageView.setVisible(false);
 
-                    // Show the session container
                     sessionContainer.setVisible(true);
                 } else {
                     welcomeText.setText("Invalid movie set in the Binary file!");
@@ -327,10 +325,8 @@ public class MovieController {
                     movieTableView.getItems().addAll(movieSet);
                     welcomeText.setText("Movie set loaded from CSV");
 
-                    // Hide the logo
                     logoImageView.setVisible(false);
 
-                    // Show the session container
                     sessionContainer.setVisible(true);
                 } else {
                     welcomeText.setText("Invalid movie set in the CSV file!");
@@ -362,17 +358,15 @@ public class MovieController {
 
     @FXML
     protected void onCloseSessionClicked() {
-        sessionContainer.setVisible(false); // Hide the session container
 
-        // Clear the input fields
+        sessionContainer.setVisible(false);
+
         nameField.clear();
         releaseField.clear();
         genreComboBox.setValue(null);
 
         movieTableView.getItems().clear();
-
         logoImageView.setVisible(true);
-
         welcomeText.setText("");
     }
 
@@ -401,11 +395,8 @@ public class MovieController {
             logoImageView.setVisible(false);
             sessionContainer.setVisible(true);
 
-            // Reset genreComboBox
             genreComboBox.getSelectionModel().select("Select genre");
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
