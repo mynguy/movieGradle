@@ -3,8 +3,7 @@
 ## Prerequisites
 Before you begin, make sure you have the following software installed on your system:
 
-# Liberica JDK 17 (BellSoft) or a compatible version
-Step 1: Download Liberica JDK 17
+# Step 1: Download Liberica JDK 17
 Download Liberica JDK 17 (BellSoft) from the BellSoft website: Download Liberica JDK 17.
 Follow the installation instructions for your operating system to complete the JDK installation.
 
