@@ -17,6 +17,7 @@ public class GenreOptions {
      */
     public static ObservableList<String> getGenreOptions() {
         return FXCollections.observableArrayList(
+                "Select genre",
                 "Action",
                 "Adventure",
                 "Comedy",

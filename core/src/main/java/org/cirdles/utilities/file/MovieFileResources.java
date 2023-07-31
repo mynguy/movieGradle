@@ -35,10 +35,8 @@ public enum MovieFileResources {
             throw new IOException("Failed to create the MovieResources folder.");
         }
 
-        // Construct the relative path to the librarySample folder
         String librarySampleFolderPath = Paths.get(projectRoot, "core", "src", "main", "resources", "org.cirdles", "librarySample").toString();
         retrieveResourceFiles(movieResourcesFolder, librarySampleFolderPath);
-
         System.out.println("\nResource files loaded.");
     }
 

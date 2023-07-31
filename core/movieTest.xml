@@ -20,14 +20,4 @@
         <name>The Conjuring</name>
         <year>2013</year>
     </movie>
-    <movie>
-        <genre>Action</genre>
-        <name>The Dark Knight</name>
-        <year>2008</year>
-    </movie>
-    <movie>
-        <genre>Drama</genre>
-        <name>The Shawshank Redemption</name>
-        <year>1994</year>
-    </movie>
 </movies>

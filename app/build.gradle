@@ -31,5 +31,5 @@ test {
 project(":app") {
     description = "Serialization and Deserialization"
     archivesBaseName = "Movie Gradle"
-    mainClassName = 'org.cirdles.app.MovieApplication'
+    mainClassName = "org.cirdles.app.MovieApplication"
 }

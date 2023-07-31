@@ -79,7 +79,6 @@ public class MovieController {
                     movieEditor.handleRemoveMovie(movie);
                 });
             }
-
             @Override
             protected void updateItem(Movie movie, boolean empty) {
                 super.updateItem(movie, empty);
@@ -94,9 +93,7 @@ public class MovieController {
                 }
             }
         });
-
         movieTableView.getItems().addAll(movieSet);
-
     }
 
     @FXML
@@ -151,10 +148,8 @@ public class MovieController {
                     // Perform the serialization on the JavaFX Application Thread
                     Platform.runLater(() -> {
                         try {
-
                             // Below is the line that is giving a lot of issue
                             XMLSerializer.serializeToXML(movieSetWrapper, filename);
-
                             welcomeText.setText("Movie data saved as XML!");
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -240,7 +235,6 @@ public class MovieController {
         content.getChildren().add(vbox);
 
         alert.getDialogPane().setContent(content);
-
         alert.showAndWait();
     }
 
@@ -257,8 +251,6 @@ public class MovieController {
                 movieTableView.getItems().clear();
                 movieTableView.getItems().addAll(movieSet);
                 welcomeText.setText("Movie set loaded from XML");
-
-                // Hide the logo
                 logoImageView.setVisible(false);
 
                 // Show the session container
@@ -292,7 +284,6 @@ public class MovieController {
                     welcomeText.setText("Movie set loaded from Binary");
 
                     logoImageView.setVisible(false);
-
                     sessionContainer.setVisible(true);
                 } else {
                     welcomeText.setText("Invalid movie set in the Binary file!");
@@ -316,17 +307,15 @@ public class MovieController {
 
         if (file != null) {
             String filename = file.getPath();
-
             try {
                 Set<Movie> loadedMovieSet = Movie.deserializeSetFromCSV(filename);
                 if (loadedMovieSet != null && !loadedMovieSet.isEmpty()) {
                     movieSet = loadedMovieSet;
                     movieTableView.getItems().clear();
                     movieTableView.getItems().addAll(movieSet);
+
                     welcomeText.setText("Movie set loaded from CSV");
-
                     logoImageView.setVisible(false);
-
                     sessionContainer.setVisible(true);
                 } else {
                     welcomeText.setText("Invalid movie set in the CSV file!");
@@ -350,9 +339,7 @@ public class MovieController {
         genreComboBox.getSelectionModel().select("Select genre");
 
         movieTableView.getItems().clear();
-
         logoImageView.setVisible(false);
-
         welcomeText.setText("");
     }
 
@@ -380,9 +367,7 @@ public class MovieController {
     public void openDemonstrationSessionMenuItemAction() {
         try {
             sessionContainer.requestFocus();
-
             MovieFileResources.initLocalResources();
-
             String csvFilePath = "MovieResources/movieSetExample.csv";
 
             // Load the movieSetExample.csv file from the resources folder
@@ -394,7 +379,6 @@ public class MovieController {
 
             logoImageView.setVisible(false);
             sessionContainer.setVisible(true);
-
             genreComboBox.getSelectionModel().select("Select genre");
         } catch (IOException e) {
             e.printStackTrace();

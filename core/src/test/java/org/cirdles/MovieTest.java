@@ -30,8 +30,6 @@ class MovieTest {
         movieSet.add(new Movie("Hereditary", 2018, "Horror"));
         movieSet.add(new Movie("The Conjuring", 2013, "Horror"));
         movieSet.add(new Movie("Inception", 2010, "Science Fiction"));
-        movieSet.add(new Movie("The Shawshank Redemption", 1994, "Drama"));
-        movieSet.add(new Movie("The Dark Knight", 2008, "Action"));
     }
 
     @AfterEach
