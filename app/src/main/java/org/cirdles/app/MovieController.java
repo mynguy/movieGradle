@@ -2,7 +2,6 @@ package org.cirdles.app;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
@@ -17,7 +16,6 @@ import javafx.util.converter.IntegerStringConverter;
 import org.cirdles.*;
 import org.cirdles.app.utilities.GenreOptions;
 import org.cirdles.app.utilities.MovieEditor;
-import org.cirdles.app.utilities.MovieEditorHandler;
 import org.cirdles.utilities.file.MovieFileResources;
 
 import java.io.*;
@@ -393,6 +391,7 @@ public class MovieController {
             welcomeText.setText(selectedMovie.getName() + " has been deleted.");
         }
     }
+
     @FXML
     protected void openDocumentation() {
         hostServices.showDocument("https://github.com/mynguy/movieGradle/blob/main/README.md");
