@@ -14,9 +14,11 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.util.converter.IntegerStringConverter;
+
 import org.cirdles.*;
 import org.cirdles.app.utilities.GenreOptions;
 import org.cirdles.app.utilities.MovieEditor;
+import org.cirdles.app.utilities.MovieEditorHandler;
 import org.cirdles.utilities.file.MovieFileResources;
 
 import java.io.*;
@@ -65,8 +67,8 @@ public class MovieController {
         nameColumn.setOnEditCommit(event -> {
             Movie movie = event.getRowValue();
             String newName = event.getNewValue().trim();
-            int newYear = movie.getYear(); // Keep the existing year value
-            String newGenre = movie.getGenre(); // Keep the existing genre value
+            int newYear = movie.getYear();
+            String newGenre = movie.getGenre();
             movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
         });
 
@@ -74,9 +76,9 @@ public class MovieController {
         releaseYearColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         releaseYearColumn.setOnEditCommit(event -> {
             Movie movie = event.getRowValue();
-            String newName = movie.getName(); // Keep the existing name value
+            String newName = movie.getName();
             int newYear = event.getNewValue();
-            String newGenre = movie.getGenre(); // Keep the existing genre value
+            String newGenre = movie.getGenre();
             movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
         });
 
@@ -84,42 +86,21 @@ public class MovieController {
         genreColumn.setCellFactory(ComboBoxTableCell.forTableColumn(GenreOptions.getGenreOptions()));
         genreColumn.setOnEditCommit(event -> {
             Movie movie = event.getRowValue();
-            String newName = movie.getName(); // Keep the existing name value
-            int newYear = movie.getYear(); // Keep the existing year value
+            String newName = movie.getName();
+            int newYear = movie.getYear();
             String newGenre = event.getNewValue();
             movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
         });
 
+        MovieEditorHandler editorHandler = new MovieEditorHandler(movieEditor);
+
+        // Update this line to use the createRemoveButtonCell() method
         actionColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-        actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button removeButton = new Button("X");
-
-            {
-                removeButton.setOnAction(event -> {
-                    Movie movie = getTableView().getItems().get(getIndex());
-                    movieEditor.handleRemoveMovie(movie);
-                });
-            }
-
-            @Override
-            protected void updateItem(Movie movie, boolean empty) {
-                super.updateItem(movie, empty);
-
-                if (empty || movie == null) {
-                    setGraphic(null);
-                } else {
-                    HBox container = new HBox(5);
-                    container.setAlignment(Pos.CENTER);
-                    container.getChildren().addAll(removeButton);
-                    setGraphic(container);
-                }
-            }
-        });
+        actionColumn.setCellFactory(param -> editorHandler.createRemoveButtonCell());
 
         movieTableView.setEditable(true);
         movieTableView.getItems().addAll(movieSet);
     }
-
     @FXML
     protected void addMovieButtonClicked() {
         String name = nameField.getText();

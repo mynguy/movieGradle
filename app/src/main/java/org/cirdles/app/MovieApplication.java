@@ -20,8 +20,6 @@ public class MovieApplication extends Application {
         Scene scene = new Scene(root);
         primaryStage.setTitle("Movie Serialization");
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(320);
-        primaryStage.setMinHeight(240);
 
         primaryStage.show();
     }

@@ -25,6 +25,8 @@ public enum MovieFileResources {
     public static void initLocalResources() throws IOException {
         // Use the current working directory to get the root path of the project
         String projectRoot = System.getProperty("user.dir");
+        projectRoot = Paths.get(projectRoot).getParent().toString();
+
         String movieResourcesFolderPath = Paths.get(projectRoot, "MovieResources").toString();
         File movieResourcesFolder = new File(movieResourcesFolderPath);
 
@@ -34,7 +36,6 @@ public enum MovieFileResources {
         if (!movieResourcesFolder.mkdir()) {
             throw new IOException("Failed to create the MovieResources folder.");
         }
-
         String librarySampleFolderPath = Paths.get(projectRoot, "core", "src", "main", "resources", "org.cirdles", "librarySample").toString();
         retrieveResourceFiles(movieResourcesFolder, librarySampleFolderPath);
         System.out.println("\nResource files loaded.");

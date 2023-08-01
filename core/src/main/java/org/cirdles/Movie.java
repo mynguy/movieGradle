@@ -112,7 +112,6 @@ public class Movie implements Comparable<Movie>, Serializable {
     public int hashCode() {
         return Objects.hash(name, genre, release);
     }
-
     @XmlElement
     public String getName() {
         return name;
@@ -129,11 +128,9 @@ public class Movie implements Comparable<Movie>, Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
     public void setGenre(String genre) {
         this.genre = genre;
     }
-
     public void setYear(int release) {
         this.release = release;
     }

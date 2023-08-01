@@ -18,10 +18,6 @@ public class MovieEditor {
         this.welcomeText = welcomeText;
     }
 
-    public void setMovieTableView(TableView<Movie> movieTableView) {
-        this.movieTableView = movieTableView;
-    }
-
     public void handleEditMovie(Movie movie, String newName, int newYear, String newGenre) {
         if (!newName.isEmpty() && newYear >= 1000 && newYear <= 3000 && !newGenre.equals("Select genre")) {
             movie.setName(newName);
