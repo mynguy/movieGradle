@@ -101,7 +101,7 @@
                     <Insets />
                 </VBox.margin>
             </TableView>
-             <Button alignment="CENTER" onAction="#deleteSelectedMovie" prefHeight="25.0" prefWidth="20.0" text="X">
+             <Button alignment="CENTER" onAction="#deleteSelectedMovie" prefHeight="25.0" prefWidth="61.0" text="Delete">
             <VBox.margin>
                <Insets bottom="5.0" top="-8.0" />
             </VBox.margin>

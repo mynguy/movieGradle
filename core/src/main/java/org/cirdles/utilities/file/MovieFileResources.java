@@ -24,10 +24,9 @@ public enum MovieFileResources {
 
     public static void initLocalResources() throws IOException {
         // Use the current working directory to get the root path of the project
-        String projectRoot = System.getProperty("user.dir");
-        projectRoot = Paths.get(projectRoot).getParent().toString();
+        String projectRoot = Paths.get(System.getProperty("user.dir")).getParent().toString();
 
-        String movieResourcesFolderPath = Paths.get(projectRoot, "MovieResources").toString();
+        String movieResourcesFolderPath = Paths.get(projectRoot,"app", "MovieResources").toString();
         File movieResourcesFolder = new File(movieResourcesFolderPath);
 
         if (movieResourcesFolder.exists()) {
@@ -74,18 +73,6 @@ public enum MovieFileResources {
 
                 // Use Files.copy to copy the file contents to the target folder
                 Files.copy(resourceFileName.toPath(), resourceLocalFileName.toPath());
-            }
-        }
-
-        // After copying files, move them to the MOVIE_RESOURCES_FOLDER
-        File movieResourcesFolder = new File(MOVIE_RESOURCES_FOLDER);
-        if (!movieResourcesFolder.exists()) {
-            movieResourcesFolder.mkdir();
-        }
-        File[] resourceFiles = resourceTargetFolder.listFiles();
-        if (resourceFiles != null) {
-            for (File resourceFile : resourceFiles) {
-                resourceFile.renameTo(new File(movieResourcesFolder, resourceFile.getName()));
             }
         }
     }

@@ -365,11 +365,15 @@ public class MovieController {
         try {
             sessionContainer.requestFocus();
             MovieFileResources.initLocalResources();
+
             String csvFilePath = "MovieResources/movieSetExample.csv";
+            File csvFile = new File(csvFilePath);
 
-            // Load the movieSetExample.csv file from the resources folder
-            movieSet = Movie.deserializeSetFromCSV(csvFilePath);
+            if (!csvFile.exists()) {
+                throw new FileNotFoundException("movieSetExample.csv not found.");
+            }
 
+            movieSet = Movie.deserializeSetFromCSV(csvFile.getAbsolutePath());
             movieTableView.getItems().clear();
             movieTableView.getItems().addAll(movieSet);
             welcomeText.setText("Movie set loaded from CSV");
