@@ -96,12 +96,16 @@
                     <TableColumn fx:id="nameColumn" maxWidth="500.0" minWidth="107.0" prefWidth="113.0" text="Name" />
                     <TableColumn fx:id="releaseYearColumn" maxWidth="88.0" minWidth="53.0" prefWidth="74.0" text="Year" />
                     <TableColumn fx:id="genreColumn" maxWidth="104.0" minWidth="68.0" prefWidth="68.0" text="Genre" />
-                    <TableColumn fx:id="actionColumn" maxWidth="500.0" minWidth="79.0" prefWidth="86.0" text="Action" />
                 </columns>
                 <VBox.margin>
-                    <Insets bottom="5.0" />
+                    <Insets />
                 </VBox.margin>
             </TableView>
+             <Button alignment="CENTER" onAction="#deleteSelectedMovie" prefHeight="25.0" prefWidth="20.0" text="X">
+            <VBox.margin>
+               <Insets bottom="5.0" top="-8.0" />
+            </VBox.margin>
+             </Button>
             <padding>
                 <Insets left="5.0" right="5.0" />
             </padding>

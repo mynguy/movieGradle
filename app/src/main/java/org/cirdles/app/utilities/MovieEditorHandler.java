@@ -13,6 +13,7 @@ public class MovieEditorHandler {
         this.movieEditor = movieEditor;
     }
 
+    // Create a cell with a "remove" button for each movie
     public TableCell<Movie, Movie> createRemoveButtonCell() {
         return new TableCell<>() {
             private final Button removeButton = new Button("X");
@@ -32,7 +33,7 @@ public class MovieEditorHandler {
                     setGraphic(null);
                 } else {
                     HBox container = new HBox(5);
-                    container.setAlignment(Pos.CENTER);
+                    container.setAlignment(Pos.CENTER_LEFT); // Align the "X" button to the bottom left
                     container.getChildren().addAll(removeButton);
                     setGraphic(container);
                 }

@@ -4,7 +4,6 @@ import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
-import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -92,15 +91,10 @@ public class MovieController {
             movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
         });
 
-        MovieEditorHandler editorHandler = new MovieEditorHandler(movieEditor);
-
-        // Update this line to use the createRemoveButtonCell() method
-        actionColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-        actionColumn.setCellFactory(param -> editorHandler.createRemoveButtonCell());
-
         movieTableView.setEditable(true);
         movieTableView.getItems().addAll(movieSet);
     }
+
     @FXML
     protected void addMovieButtonClicked() {
         String name = nameField.getText();
@@ -390,6 +384,15 @@ public class MovieController {
         }
     }
 
+    @FXML
+    private void deleteSelectedMovie() {
+        Movie selectedMovie = movieTableView.getSelectionModel().getSelectedItem();
+        if (selectedMovie != null) {
+            movieSet.remove(selectedMovie);
+            movieTableView.getItems().remove(selectedMovie);
+            welcomeText.setText(selectedMovie.getName() + " has been deleted.");
+        }
+    }
     @FXML
     protected void openDocumentation() {
         hostServices.showDocument("https://github.com/mynguy/movieGradle/blob/main/README.md");
