@@ -6,11 +6,14 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.geometry.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.*;
+import javafx.util.converter.IntegerStringConverter;
 import org.cirdles.*;
 import org.cirdles.app.utilities.GenreOptions;
 import org.cirdles.app.utilities.MovieEditor;
@@ -53,32 +56,51 @@ public class MovieController {
     }
 
     public void initialize() {
-
         movieEditor = new MovieEditor(movieTableView, movieSet, welcomeText);
-        movieEditor.setMovieTableView(movieTableView);
 
         genreComboBox.getItems().addAll(GenreOptions.getGenreOptions());
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameColumn.setOnEditCommit(event -> {
+            Movie movie = event.getRowValue();
+            String newName = event.getNewValue().trim();
+            int newYear = movie.getYear(); // Keep the existing year value
+            String newGenre = movie.getGenre(); // Keep the existing genre value
+            movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
+        });
+
         releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+        releaseYearColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        releaseYearColumn.setOnEditCommit(event -> {
+            Movie movie = event.getRowValue();
+            String newName = movie.getName(); // Keep the existing name value
+            int newYear = event.getNewValue();
+            String newGenre = movie.getGenre(); // Keep the existing genre value
+            movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
+        });
+
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        genreColumn.setCellFactory(ComboBoxTableCell.forTableColumn(GenreOptions.getGenreOptions()));
+        genreColumn.setOnEditCommit(event -> {
+            Movie movie = event.getRowValue();
+            String newName = movie.getName(); // Keep the existing name value
+            int newYear = movie.getYear(); // Keep the existing year value
+            String newGenre = event.getNewValue();
+            movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
+        });
 
         actionColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
         actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button editButton = new Button("Edit");
             private final Button removeButton = new Button("X");
 
             {
-                editButton.setOnAction(event -> {
-                    Movie movie = getTableView().getItems().get(getIndex());
-                    movieEditor.handleEditMovie(movie);
-                });
-
                 removeButton.setOnAction(event -> {
                     Movie movie = getTableView().getItems().get(getIndex());
                     movieEditor.handleRemoveMovie(movie);
                 });
             }
+
             @Override
             protected void updateItem(Movie movie, boolean empty) {
                 super.updateItem(movie, empty);
@@ -88,11 +110,13 @@ public class MovieController {
                 } else {
                     HBox container = new HBox(5);
                     container.setAlignment(Pos.CENTER);
-                    container.getChildren().addAll(editButton, removeButton);
+                    container.getChildren().addAll(removeButton);
                     setGraphic(container);
                 }
             }
         });
+
+        movieTableView.setEditable(true);
         movieTableView.getItems().addAll(movieSet);
     }
 

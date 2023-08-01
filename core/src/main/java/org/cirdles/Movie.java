@@ -125,6 +125,18 @@ public class Movie implements Comparable<Movie>, Serializable {
     public int getYear() {
         return release;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public void setYear(int release) {
+        this.release = release;
+    }
 }
 
 
