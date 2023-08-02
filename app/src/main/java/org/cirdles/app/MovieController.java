@@ -55,7 +55,7 @@ public class MovieController {
     }
 
     public void initialize() {
-        movieEditor = new MovieEditor(movieTableView, movieSet, welcomeText);
+        movieEditor = new MovieEditor(movieTableView, welcomeText);
 
         genreComboBox.getItems().addAll(GenreOptions.getGenreOptions());
 

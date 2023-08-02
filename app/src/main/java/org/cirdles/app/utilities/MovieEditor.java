@@ -9,12 +9,10 @@ import java.util.Set;
 public class MovieEditor {
 
     private TableView<Movie> movieTableView;
-    private Set<Movie> movieSet;
     private Label welcomeText;
 
-    public MovieEditor(TableView<Movie> movieTableView, Set<Movie> movieSet, Label welcomeText) {
+    public MovieEditor(TableView<Movie> movieTableView, Label welcomeText) {
         this.movieTableView = movieTableView;
-        this.movieSet = movieSet;
         this.welcomeText = welcomeText;
     }
 
@@ -39,11 +37,5 @@ public class MovieEditor {
             welcomeText.setText(errorMessage.toString());
             movieTableView.refresh();
         }
-    }
-
-    public void handleRemoveMovie(Movie movie) {
-        movieSet.remove(movie);
-        movieTableView.getItems().remove(movie);
-        welcomeText.setText("Movie removed: " + movie.getName());
     }
 }
