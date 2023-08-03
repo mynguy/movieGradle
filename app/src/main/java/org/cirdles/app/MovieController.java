@@ -217,6 +217,9 @@ public class MovieController {
         content.getChildren().add(vbox);
 
         alert.getDialogPane().setContent(content);
+        // Get the main application window (the root of the scene)
+        Stage mainStage = (Stage) welcomeText.getScene().getWindow();
+        alert.initOwner(mainStage);
         alert.showAndWait();
     }
 
