@@ -4,8 +4,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import org.cirdles.Movie;
 
-import java.util.Set;
-
 public class MovieEditor {
 
     private TableView<Movie> movieTableView;

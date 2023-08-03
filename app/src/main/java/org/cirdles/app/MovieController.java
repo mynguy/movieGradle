@@ -2,20 +2,19 @@ package org.cirdles.app;
 
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.*;
-import javafx.util.converter.IntegerStringConverter;
 
 import org.cirdles.*;
 import org.cirdles.app.utilities.GenreOptions;
 import org.cirdles.app.utilities.MovieEditor;
+import org.cirdles.app.utilities.SaveButtonStateManager;
+import org.cirdles.app.utilities.TableCellEditor;
 import org.cirdles.utilities.file.MovieFileResources;
 
 import java.io.*;
@@ -42,13 +41,18 @@ public class MovieController {
     @FXML
     private TableColumn<Movie, Integer> releaseYearColumn;
     @FXML
-    private TableColumn<Movie, Movie> actionColumn;
-    @FXML
     private VBox sessionContainer;
     @FXML
     private ImageView logoImageView;
+    @FXML
+    private Button saveXMLButton;
+    @FXML
+    private Button saveBinaryButton;
+    @FXML
+    private Button saveCSVButton;
     private Set<Movie> movieSet;
     private MovieEditor movieEditor;
+    private SaveButtonStateManager saveButtonStateManager;
 
     public MovieController() {
         movieSet = new TreeSet<>();
@@ -56,41 +60,27 @@ public class MovieController {
 
     public void initialize() {
         movieEditor = new MovieEditor(movieTableView, welcomeText);
+        TableCellEditor tableCellEditor = new TableCellEditor(movieTableView, movieEditor);
 
         genreComboBox.getItems().addAll(GenreOptions.getGenreOptions());
 
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        nameColumn.setOnEditCommit(event -> {
-            Movie movie = event.getRowValue();
-            String newName = event.getNewValue().trim();
-            int newYear = movie.getYear();
-            String newGenre = movie.getGenre();
-            movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
-        });
-
-        releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
-        releaseYearColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        releaseYearColumn.setOnEditCommit(event -> {
-            Movie movie = event.getRowValue();
-            String newName = movie.getName();
-            int newYear = event.getNewValue();
-            String newGenre = movie.getGenre();
-            movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
-        });
-
-        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
-        genreColumn.setCellFactory(ComboBoxTableCell.forTableColumn(GenreOptions.getGenreOptions()));
-        genreColumn.setOnEditCommit(event -> {
-            Movie movie = event.getRowValue();
-            String newName = movie.getName();
-            int newYear = movie.getYear();
-            String newGenre = event.getNewValue();
-            movieEditor.handleEditMovie(movie, newName, newYear, newGenre);
-        });
+        tableCellEditor.addTextFieldCellFactory(nameColumn);
+        tableCellEditor.addIntegerFieldCellFactory(releaseYearColumn);
+        tableCellEditor.addComboBoxCellFactory(genreColumn);
 
         movieTableView.setEditable(true);
         movieTableView.getItems().addAll(movieSet);
+
+        saveButtonStateManager = new SaveButtonStateManager(
+                saveXMLButton, saveBinaryButton, saveCSVButton, nameField, releaseField, genreComboBox, movieTableView
+        );
+
+        saveButtonStateManager.updateSaveButtonsState();
+
+        // Add an InvalidationListener to the table data to watch for changes in the items list
+        movieTableView.getItems().addListener((InvalidationListener) observable -> {
+            saveButtonStateManager.updateSaveButtonsState();
+        });
     }
 
     @FXML
@@ -124,6 +114,7 @@ public class MovieController {
         } else {
             welcomeText.setText("Please enter movie details!");
         }
+        saveButtonStateManager.updateSaveButtonsState();
     }
 
     @FXML
@@ -134,7 +125,6 @@ public class MovieController {
                 fileChooser.setTitle("Save Movies as XML");
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
 
-                // Show save file dialog
                 Stage stage = (Stage) welcomeText.getScene().getWindow();
                 File file = fileChooser.showSaveDialog(stage);
 
@@ -142,17 +132,13 @@ public class MovieController {
                     String filename = file.getPath();
                     MovieSetWrapper movieSetWrapper = new MovieSetWrapper(movieSet);
 
-                    // Perform the serialization on the JavaFX Application Thread
-                    Platform.runLater(() -> {
-                        try {
-                            // Below is the line that is giving a lot of issue
-                            XMLSerializer.serializeToXML(movieSetWrapper, filename);
-                            welcomeText.setText("Movie data saved as XML!");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            welcomeText.setText("Error occurred while saving movies as XML. See console for details.");
-                        }
-                    });
+                    try {
+                        XMLSerializer.serializeToXML(movieSetWrapper, filename);
+                        welcomeText.setText("Movie data saved as XML!");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        welcomeText.setText("Error occurred while saving movies as XML. See console for details.");
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -196,7 +182,6 @@ public class MovieController {
                 fileChooser.setTitle("Save Movies as Binary");
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Binary Files", "*.bin"));
 
-                // Show save file dialog
                 Stage stage = (Stage) welcomeText.getScene().getWindow();
                 File file = fileChooser.showSaveDialog(stage);
 
@@ -257,6 +242,7 @@ public class MovieController {
             }
         }
         genreComboBox.getSelectionModel().select("Select genre");
+        saveButtonStateManager.updateSaveButtonsState();
     }
 
     @FXML
@@ -290,6 +276,7 @@ public class MovieController {
             }
         }
         genreComboBox.getSelectionModel().select("Select genre");
+        saveButtonStateManager.updateSaveButtonsState();
     }
 
     @FXML
@@ -323,6 +310,7 @@ public class MovieController {
 
         }
         genreComboBox.getSelectionModel().select("Select genre");
+        saveButtonStateManager.updateSaveButtonsState();
     }
 
     @FXML
@@ -338,6 +326,8 @@ public class MovieController {
         movieTableView.getItems().clear();
         logoImageView.setVisible(false);
         welcomeText.setText("");
+
+        saveButtonStateManager.updateSaveButtonsState();
     }
 
     @FXML
@@ -381,6 +371,8 @@ public class MovieController {
             logoImageView.setVisible(false);
             sessionContainer.setVisible(true);
             genreComboBox.getSelectionModel().select("Select genre");
+
+            saveButtonStateManager.updateSaveButtonsState();
         } catch (IOException e) {
             e.printStackTrace();
         }

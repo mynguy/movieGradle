@@ -76,9 +76,9 @@
                 </Button>
             </HBox>
             <HBox alignment="CENTER" spacing="4">
-                <Button contentDisplay="CENTER" onAction="#onSaveXMLButtonClick" prefHeight="25.0" prefWidth="150.0" text="Save as XML" textAlignment="CENTER" />
-                <Button contentDisplay="CENTER" onAction="#onSaveCSVButtonClick" prefHeight="25.0" prefWidth="150.0" text="Save as CSV" textAlignment="CENTER" />
-                <Button contentDisplay="CENTER" onAction="#onSaveBinaryButtonClick" prefHeight="25.0" prefWidth="150.0" text="Save as Binary" textAlignment="CENTER" />
+                <Button fx:id="saveXMLButton" contentDisplay="CENTER" onAction="#onSaveXMLButtonClick" prefHeight="25.0" prefWidth="150.0" text="Save as XML" textAlignment="CENTER" />
+                <Button fx:id="saveCSVButton" contentDisplay="CENTER" onAction="#onSaveCSVButtonClick" prefHeight="25.0" prefWidth="150.0" text="Save as CSV" textAlignment="CENTER" />
+                <Button fx:id="saveBinaryButton" contentDisplay="CENTER" onAction="#onSaveBinaryButtonClick" prefHeight="25.0" prefWidth="150.0" text="Save as Binary" textAlignment="CENTER" />
             </HBox>
 
             <HBox alignment="CENTER">
