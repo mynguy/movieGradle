@@ -11,10 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.*;
 
 import org.cirdles.*;
-import org.cirdles.app.utilities.GenreOptions;
-import org.cirdles.app.utilities.MovieEditor;
-import org.cirdles.app.utilities.SaveButtonStateManager;
-import org.cirdles.app.utilities.TableCellEditor;
+import org.cirdles.app.utilities.*;
 import org.cirdles.utilities.file.MovieFileResources;
 
 import java.io.*;
@@ -200,27 +197,8 @@ public class MovieController {
 
     @FXML
     protected void onHelpButtonClick() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("About");
-        alert.setHeaderText("Movie Application");
-
-        VBox content = new VBox();
-        content.setSpacing(10);
-
-        Text helpText = new Text("Information\n\n" +
-                "Enter the details of a movie in the respective fields and select a genre from the dropdown menu. " +
-                "\nClick 'Add Movie' to add it to the collection. Click 'Edit' to edit a movie's data.\n" +
-                "Once you have added multiple movies, use the 'Save as' buttons to save the movie data as CSV, XML, or Binary.\n");
-
-        VBox vbox = new VBox();
-        vbox.getChildren().add(helpText);
-        content.getChildren().add(vbox);
-
-        alert.getDialogPane().setContent(content);
-        // Get the main application window (the root of the scene)
         Stage mainStage = (Stage) welcomeText.getScene().getWindow();
-        alert.initOwner(mainStage);
-        alert.showAndWait();
+        AppInstructions.showInstructions(mainStage);
     }
 
     @FXML
