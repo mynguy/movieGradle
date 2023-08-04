@@ -18,9 +18,6 @@ import java.io.*;
 import java.util.*;
 
 public class MovieController {
-
-    private HostServices hostServices;
-
     public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
     }
@@ -47,10 +44,12 @@ public class MovieController {
     private Button saveBinaryButton;
     @FXML
     private Button saveCSVButton;
+    @FXML
+    private Button deleteButton;
     private Set<Movie> movieSet;
     private MovieEditor movieEditor;
     private SaveButtonStateManager saveButtonStateManager;
-
+    private HostServices hostServices;
     public MovieController() {
         movieSet = new TreeSet<>();
     }
@@ -71,12 +70,14 @@ public class MovieController {
         saveButtonStateManager = new SaveButtonStateManager(
                 saveXMLButton, saveBinaryButton, saveCSVButton, nameField, releaseField, genreComboBox, movieTableView
         );
-
         saveButtonStateManager.updateSaveButtonsState();
-
-        // Add an InvalidationListener to the table data to watch for changes in the items list
         movieTableView.getItems().addListener((InvalidationListener) observable -> {
             saveButtonStateManager.updateSaveButtonsState();
+        });
+
+        deleteButton.setDisable(true);
+        movieTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            deleteButton.setDisable(newValue == null);
         });
     }
 
@@ -154,7 +155,6 @@ public class MovieController {
                 fileChooser.setTitle("Save Movies as CSV");
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
 
-                // Show save file dialog
                 Stage stage = (Stage) welcomeText.getScene().getWindow();
                 File file = fileChooser.showSaveDialog(stage);
 
@@ -216,7 +216,6 @@ public class MovieController {
                 welcomeText.setText("Movie set loaded from XML");
                 logoImageView.setVisible(false);
 
-                // Show the session container
                 sessionContainer.setVisible(true);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -232,7 +231,6 @@ public class MovieController {
         fileChooser.setTitle("Open Movie Set (Binary)");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Binary Files", "*.bin"));
 
-        // Show open file dialog
         Stage stage = (Stage) welcomeText.getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);
 
@@ -266,7 +264,6 @@ public class MovieController {
         fileChooser.setTitle("Open Movie Set (CSV)");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
 
-        // Show open file dialog
         Stage stage = (Stage) welcomeText.getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);
 
