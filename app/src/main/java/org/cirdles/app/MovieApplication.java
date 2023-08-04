@@ -1,3 +1,12 @@
+/**
+ * Name: My Nguyen
+ * MovieApplication.java
+ *
+ * Main entry point for the Movie Application.
+ * Sets up the graphical user interface for the movie library, allowing users to manage movie data.
+ * Provides options to add, edit, and delete movies, and save data in various formats (CSV, XML, Binary).
+ */
+
 package org.cirdles.app;
 
 import javafx.application.Application;

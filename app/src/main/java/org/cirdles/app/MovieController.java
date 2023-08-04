@@ -1,13 +1,22 @@
+/**
+ * Name: My Nguyen
+ * MovieController.java
+ *
+ * Description: This class is the controller for the Movie Application GUI.
+ * It manages the user interface, interactions, and data processing for the application.
+ * The controller initializes the application, handles movie editing, and manages movie data.
+ * It allows users to add, edit, and delete movies, and save movie data in different formats (CSV, XML, Binary).
+ * Users can start a new movie library, open a demonstration library, and close the current library.
+ * The controller also provides help and documentation for using the application.
+ */
 package org.cirdles.app;
 
 import javafx.application.HostServices;
-import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.*;
 
 import org.cirdles.*;
@@ -46,14 +55,28 @@ public class MovieController {
     private Button saveCSVButton;
     @FXML
     private Button deleteButton;
+    @FXML
+    private Button addMovieButton;
     private Set<Movie> movieSet;
     private MovieEditor movieEditor;
+    private AddButtonStateManager addButtonStateManager;
     private SaveButtonStateManager saveButtonStateManager;
     private HostServices hostServices;
     public MovieController() {
         movieSet = new TreeSet<>();
     }
 
+    /**
+     * Initializes the Movie Application and sets up various components and event listeners.
+     * - Creates a MovieEditor and TableCellEditor to handle movie data and cell editing.
+     * - Populates the genreComboBox with genre options.
+     * - Configures cell factories for name, release year, and genre columns in the TableView.
+     * - Sets the TableView to be editable and populates it with movies from the movieSet.
+     * - Manages the state of "Save as" buttons with SaveButtonStateManager.
+     * - Disables the deleteButton initially, enabling it when a movie is selected in the TableView.
+     * - Manages the state of the "Add Movie" button with AddButtonStateManager.
+     * - Updates the "Add Movie" button state based on changes in the input fields.
+     */
     public void initialize() {
         movieEditor = new MovieEditor(movieTableView, welcomeText);
         TableCellEditor tableCellEditor = new TableCellEditor(movieTableView, movieEditor);
@@ -78,6 +101,18 @@ public class MovieController {
         deleteButton.setDisable(true);
         movieTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             deleteButton.setDisable(newValue == null);
+        });
+
+        addButtonStateManager = new AddButtonStateManager(addMovieButton, nameField, releaseField, genreComboBox);
+
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            addButtonStateManager.updateAddMovieButtonState();
+        });
+        releaseField.textProperty().addListener((observable, oldValue, newValue) -> {
+            addButtonStateManager.updateAddMovieButtonState();
+        });
+        genreComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            addButtonStateManager.updateAddMovieButtonState();
         });
     }
 

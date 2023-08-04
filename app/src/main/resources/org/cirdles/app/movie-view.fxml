@@ -69,7 +69,7 @@
                 </ComboBox>
             </HBox>
             <HBox alignment="CENTER">
-                <Button contentDisplay="CENTER" onAction="#addMovieButtonClicked" prefHeight="25.0" prefWidth="350.0" text="Add Movie" textAlignment="CENTER">
+                <Button fx:id="addMovieButton" contentDisplay="CENTER" onAction="#addMovieButtonClicked" prefHeight="25.0" prefWidth="350.0" text="Add Movie" textAlignment="CENTER" disable="true">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
@@ -93,15 +93,15 @@
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
                 <columns>
-                    <TableColumn fx:id="nameColumn" maxWidth="500.0" minWidth="107.0" prefWidth="113.0" text="Name" />
-                    <TableColumn fx:id="releaseYearColumn" maxWidth="88.0" minWidth="53.0" prefWidth="74.0" text="Year" />
-                    <TableColumn fx:id="genreColumn" maxWidth="104.0" minWidth="68.0" prefWidth="68.0" text="Genre" />
+                    <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="80.0" prefWidth="80.0" text="Name" />
+                    <TableColumn fx:id="releaseYearColumn" maxWidth="1.7976931348623157E308" minWidth="70.0" prefWidth="70.0" text="Year" />
+                    <TableColumn fx:id="genreColumn" maxWidth="1.7976931348623157E308" minWidth="75.0" prefWidth="73.0" text="Genre" />
                 </columns>
                 <VBox.margin>
                     <Insets />
                 </VBox.margin>
             </TableView>
-            <Button fx:id="deleteButton" alignment="CENTER" onAction="#deleteSelectedMovie" prefHeight="25.0" prefWidth="61.0" text="Delete" disable="true">
+            <Button fx:id="deleteButton" alignment="CENTER" disable="true" onAction="#deleteSelectedMovie" prefHeight="25.0" prefWidth="61.0" text="Delete">
                 <VBox.margin>
                     <Insets bottom="5.0" top="-8.0" />
                 </VBox.margin>
