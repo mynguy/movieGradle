@@ -16,13 +16,10 @@ Go to "File" -> "Project Structure" -> "Project."
 Make sure the "Project SDK" drop-down menu is set to Liberica JDK 17 (or the compatible version you installed).
 Click "Apply" and then "OK" to save the JDK configuration.
 
-# Step 3: Run the GUI Application
-In IntelliJ IDEA, locate and open the MovieApplication.java file.
-Right-click within the MovieApplication class and select "Run 'MovieApplication.main()'." This will launch the GUI application.
-The GUI window will appear, providing input fields for entering movie details (name, release year, and genre).
-Use the "Add Movie" button to add a movie to the movie set.
-Use the "Save Movies" button to save the movie set in CSV, binary, and XML formats.
-For more information and instructions about the application, click the "Help" button to display a dialog box.
+# Step 3: Build and Run the GUI Application Using Gradle (Crucial Step)
+After configuring the JDK in IntelliJ IDEA, you'll need to build and run the GUI application through Gradle. This step is crucial to ensure that all necessary dependencies are correctly managed and that the application runs smoothly. 
+
+Important: Whenever you need to run the program in the future, make sure to run it through Gradle using the tasks in the Gradle tool window on the right. This ensures proper execution with all dependencies.
 
 # Serialization and Deserialization of Movie Sets
 
