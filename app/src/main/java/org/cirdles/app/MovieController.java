@@ -9,6 +9,7 @@
  * Users can start a new movie library, open a demonstration library, and close the current library.
  * The controller also provides help and documentation for using the application.
  */
+
 package org.cirdles.app;
 
 import javafx.application.HostServices;
@@ -48,20 +49,14 @@ public class MovieController {
     @FXML
     private ImageView logoImageView;
     @FXML
-    private Button saveXMLButton;
-    @FXML
-    private Button saveBinaryButton;
-    @FXML
-    private Button saveCSVButton;
-    @FXML
-    private Button deleteButton;
-    @FXML
-    private Button addMovieButton;
+    private Button saveXMLButton, deleteButton, saveCSVButton, saveBinaryButton, addMovieButton;
+
     private Set<Movie> movieSet;
     private MovieEditor movieEditor;
     private AddButtonStateManager addButtonStateManager;
     private SaveButtonStateManager saveButtonStateManager;
     private HostServices hostServices;
+
     public MovieController() {
         movieSet = new TreeSet<>();
     }

@@ -5,6 +5,7 @@
  * Description: This class contains unit tests for the Movie class.
  * It tests the equality of movie sets and the serialization and deserialization of movie sets to CSV files.
  */
+
 package org.cirdles;
 
 import javax.xml.bind.annotation.XmlElement;
