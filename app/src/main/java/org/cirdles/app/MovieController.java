@@ -362,7 +362,6 @@ public class MovieController {
     public void openDemonstrationSessionMenuItemAction() {
         try {
             sessionContainer.requestFocus();
-            MovieFileResources.initLocalResources();
 
             String csvFilePath = "MovieResources/movieSetExample.csv";
             File csvFile = new File(csvFilePath);

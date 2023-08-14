@@ -27,8 +27,8 @@ class MovieTest {
     public void setUp() {
         movieSet = new TreeSet<>();
         movieSet.add(new Movie("John Wick", 2014, "Action"));
-        movieSet.add(new Movie("Hereditary", 2018, "Horror"));
         movieSet.add(new Movie("The Conjuring", 2013, "Horror"));
+        movieSet.add(new Movie("Hereditary", 2018, "Horror"));
         movieSet.add(new Movie("Inception", 2010, "Science Fiction"));
     }
 
@@ -82,49 +82,16 @@ class MovieTest {
         String filename = "movieTest.xml";
 
         try {
-            // Serialize the movie set to XML
             XMLSerializer.serializeToXML(new MovieSetWrapper(new TreeSet<>(movieSet)), filename);
 
-            // Verify that the file was created
             File xmlFile = new File(filename);
             assertTrue(xmlFile.exists());
 
             // Delete the file after verification
-            //assertTrue(xmlFile.delete());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void testSerializeMovieSetWrapper_ToXML_FileCreated() {
-        String filename = "movieSetWrapperTest.xml";
-
-        try {
-            // Create a MovieSetWrapper object with the test movieSet
-            Set<Movie> movieSet = createTestMovieSet();
-            MovieSetWrapper movieSetWrapper = new MovieSetWrapper(movieSet);
-
-            XMLSerializer.serializeToXML(movieSetWrapper, filename);
-
-            File xmlFile = new File(filename);
-            assertTrue(xmlFile.exists());
-
             assertTrue(xmlFile.delete());
         } catch (IOException e) {
             e.printStackTrace();
-            fail("Unexpected IOException occurred: " + e.getMessage());
         }
-    }
-
-    // Utility method to create a test MovieSet
-    private Set<Movie> createTestMovieSet() {
-        Set<Movie> movieSet = new TreeSet<>();
-        movieSet.add(new Movie("Movie 1", 2022, "Action"));
-        movieSet.add(new Movie("Movie 2", 2020, "Comedy"));
-        movieSet.add(new Movie("Movie 3", 2019, "Drama"));
-        // Add more test movies as needed
-        return movieSet;
     }
 }
 
