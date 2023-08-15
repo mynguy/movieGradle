@@ -1,11 +1,16 @@
-### README:
+# movieGradle
 
-## Prerequisites
+### Prerequisites
 Before you begin, make sure you have the following software installed on your system:
 
-# Step 1: Download Liberica JDK 17
-Download Liberica JDK 17 (BellSoft) from the BellSoft website: Download Liberica JDK 17.
-Follow the installation instructions for your operating system to complete the JDK installation.
+# Step 1: Download Liberica JDK 17 with JavaFX
+Please note that in order to utilize JavaFX to its fullest extent, it is essential to have the complete JDK 17 version installed on your system. JavaFX, a rich user interface toolkit, is included as part of the standard JDK distribution up to JDK 8. However, starting from JDK 11, JavaFX is no longer included in the standard JDK distribution and must be added separately.
+
+To make the most of JavaFX's features and capabilities, it's recommended to ensure you have the full JDK 17 version installed, which includes the necessary JavaFX libraries and tools. This will enable you to create interactive and visually appealing graphical user interfaces for your Java applications seamlessly.
+
+When installing Liberica JDK 17 (BellSoft), ensure that you have selected the full JDK package to guarantee access to JavaFX and its associated functionalities. Following this approach will empower you to develop modern and engaging user interfaces for your Java applications with ease.
+
+Download the JDK/JRE 17 for your operating system as a compressed archive and expand it anywhere you choose. If you want to make this version the default on your operating system, there are many online tutorials to follow. 
 
 # Step 2: Configure JDK in IntelliJ IDEA (or Preferred IDE)
 Open IntelliJ IDEA (or your preferred IDE).
