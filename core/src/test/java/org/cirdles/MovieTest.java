@@ -56,7 +56,6 @@ class MovieTest {
         Movie.serializeSetToCSV(movieSet, "movies.csv");
         Set<Movie> deserializedSet = Movie.deserializeSetFromCSV("movies.csv");
 
-        // Check if the deserialized set is equal to the original set
         assertEquals(movieSet, deserializedSet);
     }
 
@@ -66,7 +65,6 @@ class MovieTest {
         BinarySerializer.serializeToBinary(movieSet, "movies.bin");
         Set<Movie> deserializedSet = (TreeSet<Movie>) BinarySerializer.deserializeFromBinary("movies.bin");
 
-        // Check if the deserialized set is equal to the original set
         assertEquals(movieSet, deserializedSet);
     }
 

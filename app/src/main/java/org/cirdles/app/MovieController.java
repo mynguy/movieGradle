@@ -445,11 +445,9 @@ public class MovieController {
     @FXML
     protected void onOpenRecentLibraryClicked() {
         if (recentLibrarySet != null) {
-            // Load the most recent library's movie data
             movieTableView.getItems().clear();
             movieTableView.getItems().addAll(recentLibrarySet);
 
-            // Update UI elements and welcome text
             sessionContainer.setVisible(true);
             logoImageView.setVisible(false);
             welcomeText.setText("Opened most recent library");
@@ -461,11 +459,6 @@ public class MovieController {
 
     private void updateOpenRecentLibraryMenuItemState() {
         openRecentLibraryMenuItem.setDisable(recentLibrarySet.isEmpty());
-    }
-
-    private void loadRecentLibrary(Set<Movie> library) {
-        recentLibrarySet = library;
-        updateOpenRecentLibraryMenuItemState();
     }
 
     private void clearRecentLibrary() {
