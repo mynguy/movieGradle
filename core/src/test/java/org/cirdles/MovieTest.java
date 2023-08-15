@@ -30,11 +30,11 @@ class MovieTest {
         movieSet.add(new Movie("The Conjuring", 2013, "Horror"));
         movieSet.add(new Movie("Hereditary", 2018, "Horror"));
         movieSet.add(new Movie("Inception", 2010, "Science Fiction"));
+        movieSet.add(new Movie("The Matrix", 1999, "Science Fiction"));
     }
 
     @AfterEach
     void tearDown() {
-        // Clean up the files generated during testing
         File csvFile = new File("movies.csv");
         File binFile = new File("movies.bin");
         File xmlFile = new File("movies.xml");
@@ -44,30 +44,18 @@ class MovieTest {
         xmlFile.delete();
     }
 
+    /**
+     * Tests the equality of a movie set and its copy.
+     */
     @Test
     public void testEquals() {
         Set<Movie> movieSetCopy = new TreeSet<>(movieSet);
         assertEquals(movieSet, movieSetCopy);
     }
 
-    @Test
-    public void testCSVSerializeAndDeserialize() throws IOException {
-
-        Movie.serializeSetToCSV(movieSet, "movies.csv");
-        Set<Movie> deserializedSet = Movie.deserializeSetFromCSV("movies.csv");
-
-        assertEquals(movieSet, deserializedSet);
-    }
-
-    @Test
-    public void testBinarySerializeAndDeserialize() throws IOException, ClassNotFoundException {
-
-        BinarySerializer.serializeToBinary(movieSet, "movies.bin");
-        Set<Movie> deserializedSet = (TreeSet<Movie>) BinarySerializer.deserializeFromBinary("movies.bin");
-
-        assertEquals(movieSet, deserializedSet);
-    }
-
+    /**
+     * Tests the pretty print format of a movie's information.
+     */
     @Test
     public void testPrettyPrint() {
         Movie movie = new Movie("Inception", 2010, "Science Fiction");
@@ -75,6 +63,9 @@ class MovieTest {
         assertEquals(expectedOutput, movie.prettyPrint());
     }
 
+    /**
+     * Tests XML serialization and verifies file creation.
+     */
     @Test
     public void testSerializeToXML_FileCreated() {
         String filename = "movieTest.xml";
@@ -85,11 +76,68 @@ class MovieTest {
             File xmlFile = new File(filename);
             assertTrue(xmlFile.exists());
 
-            // Delete the file after verification
             assertTrue(xmlFile.delete());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Tests CSV serialization and deserialization of movie set.
+     */
+    @Test
+    public void testCSVSerializeAndDeserialize() throws IOException {
+
+        Movie.serializeSetToCSV(movieSet, "movies.csv");
+        Set<Movie> deserializedSet = Movie.deserializeSetFromCSV("movies.csv");
+
+        assertEquals(movieSet, deserializedSet);
+    }
+
+    /**
+     * Tests binary serialization and deserialization of movie set.
+     */
+    @Test
+    public void testBinarySerializeAndDeserialize() throws IOException, ClassNotFoundException {
+
+        BinarySerializer.serializeToBinary(movieSet, "movies.bin");
+        Set<Movie> deserializedSet = (TreeSet<Movie>) BinarySerializer.deserializeFromBinary("movies.bin");
+
+        assertEquals(movieSet, deserializedSet);
+    }
+
+    /**
+     * Tests XML serialization and deserialization of the movie set.
+     * Verifies equivalence between original and deserialized movie sets.
+     */
+    @Test
+    public void testXMLSerializeAndDeserialize() throws IOException, ClassNotFoundException {
+        String filename = "movies.xml";
+
+        XMLSerializer.serializeToXML(new MovieSetWrapper(new TreeSet<>(movieSet)), filename);
+        Set<Movie> deserializedSet = XMLSerializer.deserializeFromXML(filename);
+
+        assertEquals(movieSet, deserializedSet);
+
+        File xmlFile = new File(filename);
+        assertTrue(xmlFile.delete());
+    }
+
+    /**
+    * Tests serialization and deserialization with an empty movie set.
+    */
+    @Test
+    public void testEmptySetSerializationAndDeserialization() throws IOException, ClassNotFoundException {
+        Set<Movie> emptyMovieSet = new TreeSet<>();
+        String filename = "emptyMovies.xml";
+
+        XMLSerializer.serializeToXML(new MovieSetWrapper(emptyMovieSet), filename);
+        Set<Movie> deserializedSet = XMLSerializer.deserializeFromXML(filename);
+
+        assertEquals(emptyMovieSet, deserializedSet);
+
+        File xmlFile = new File(filename);
+        assertTrue(xmlFile.delete());
     }
 }
 
