@@ -32,6 +32,8 @@
                     <items>
                         <MenuItem onAction="#onNewSessionClicked" text="Start New Library" />
                         <MenuItem onAction="#openDemonstrationSessionMenuItemAction" text="Open Demonstration Library" />
+                        <MenuItem text="Open Recent Library" onAction="#onOpenRecentLibraryClicked" fx:id="openRecentLibraryMenuItem" disable="true" />
+                        <SeparatorMenuItem />
                         <MenuItem onAction="#onCloseSessionClicked" text="Close Library" />
                         <SeparatorMenuItem />
                         <MenuItem onAction="#onQuitClicked" text="Quit" />

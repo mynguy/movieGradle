@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 import org.cirdles.utilities.file.MovieFileResources;
 
 import java.io.IOException;
@@ -31,6 +32,9 @@ public class MovieApplication extends Application {
         Scene scene = new Scene(root);
         primaryStage.setTitle("Movie Serialization");
         primaryStage.setScene(scene);
+
+        Image stageIcon = new Image(getClass().getResourceAsStream("/org/cirdles/app/images/Movie.png"));
+        primaryStage.getIcons().add(stageIcon);
 
         primaryStage.show();
 

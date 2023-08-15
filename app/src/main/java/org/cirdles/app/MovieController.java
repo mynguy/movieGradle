@@ -22,7 +22,6 @@ import javafx.stage.*;
 
 import org.cirdles.*;
 import org.cirdles.app.utilities.*;
-import org.cirdles.utilities.file.MovieFileResources;
 
 import java.io.*;
 import java.util.*;
@@ -49,6 +48,8 @@ public class MovieController {
     @FXML
     private ImageView logoImageView;
     @FXML
+    private MenuItem openRecentLibraryMenuItem;
+    @FXML
     private Button saveXMLButton, deleteButton, saveCSVButton, saveBinaryButton, addMovieButton;
 
     private Set<Movie> movieSet;
@@ -56,7 +57,7 @@ public class MovieController {
     private AddButtonStateManager addButtonStateManager;
     private SaveButtonStateManager saveButtonStateManager;
     private HostServices hostServices;
-
+    private Set<Movie> recentLibrarySet = new TreeSet<>();
     public MovieController() {
         movieSet = new TreeSet<>();
     }
@@ -130,6 +131,8 @@ public class MovieController {
                         releaseField.clear();
 
                         genreComboBox.getSelectionModel().select("Select genre");
+
+                        recentLibrarySet = new TreeSet<>(movieSet);
                     } else {
                         welcomeText.setText("Please select a valid genre!");
                     }
@@ -143,6 +146,8 @@ public class MovieController {
             welcomeText.setText("Please enter movie details!");
         }
         saveButtonStateManager.updateSaveButtonsState();
+
+        updateOpenRecentLibraryMenuItemState();
     }
 
     @FXML
@@ -175,6 +180,7 @@ public class MovieController {
         } else {
             welcomeText.setText("No movies to save!");
         }
+        recentLibrarySet = new TreeSet<>(movieTableView.getItems());
     }
 
     @FXML
@@ -199,6 +205,7 @@ public class MovieController {
         } else {
             welcomeText.setText("No movies to save!");
         }
+        recentLibrarySet = new TreeSet<>(movieTableView.getItems());
     }
 
     @FXML
@@ -223,6 +230,7 @@ public class MovieController {
         } else {
             welcomeText.setText("No movies to save!");
         }
+        recentLibrarySet = new TreeSet<>(movieTableView.getItems());
     }
 
     @FXML
@@ -323,10 +331,33 @@ public class MovieController {
 
     @FXML
     protected void onNewSessionClicked() {
+        boolean shouldSave = !movieSet.isEmpty();
+
+        if (shouldSave) {
+            Alert alert = new Alert(
+                    Alert.AlertType.CONFIRMATION,
+                    "Do you want to save the current library before starting a new one?",
+                    ButtonType.YES, ButtonType.NO
+            );
+            alert.setTitle("Save Current Library");
+            alert.setHeaderText(null);
+            alert.setContentText("Do you want to save the current library before starting a new one?");
+
+            Stage mainStage = (Stage) welcomeText.getScene().getWindow();
+            alert.initOwner(mainStage);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.YES) {
+                welcomeText.setText("Make sure to save file!");
+                return;
+            }
+        }
 
         sessionContainer.setVisible(true);
         sessionContainer.requestFocus();
 
+        movieSet.clear();
         nameField.clear();
         releaseField.clear();
         genreComboBox.getSelectionModel().select("Select genre");
@@ -336,6 +367,7 @@ public class MovieController {
         welcomeText.setText("");
 
         saveButtonStateManager.updateSaveButtonsState();
+        updateOpenRecentLibraryMenuItemState();
     }
 
     @FXML
@@ -350,6 +382,9 @@ public class MovieController {
         movieTableView.getItems().clear();
         logoImageView.setVisible(true);
         welcomeText.setText("");
+
+        clearRecentLibrary();
+        updateOpenRecentLibraryMenuItemState();
     }
 
     @FXML
@@ -360,6 +395,10 @@ public class MovieController {
 
     @FXML
     public void openDemonstrationSessionMenuItemAction() {
+
+        updateOpenRecentLibraryMenuItemState();
+        recentLibrarySet = new TreeSet<>(movieTableView.getItems());
+
         try {
             sessionContainer.requestFocus();
 
@@ -370,16 +409,19 @@ public class MovieController {
                 throw new FileNotFoundException("movieSetExample.csv not found.");
             }
 
-            movieSet = Movie.deserializeSetFromCSV(csvFile.getAbsolutePath());
-            movieTableView.getItems().clear();
-            movieTableView.getItems().addAll(movieSet);
-            welcomeText.setText("Movie set loaded from CSV");
+            Set<Movie> loadedMovieSet = Movie.deserializeSetFromCSV(csvFile.getAbsolutePath());
+            if (loadedMovieSet != null && !loadedMovieSet.isEmpty()) {
+                movieSet = loadedMovieSet;
+                movieTableView.getItems().clear();
+                movieTableView.getItems().addAll(movieSet);
 
-            logoImageView.setVisible(false);
-            sessionContainer.setVisible(true);
-            genreComboBox.getSelectionModel().select("Select genre");
+                welcomeText.setText("Movie set loaded from CSV");
+                logoImageView.setVisible(false);
+                sessionContainer.setVisible(true);
+                genreComboBox.getSelectionModel().select("Select genre");
 
-            saveButtonStateManager.updateSaveButtonsState();
+                saveButtonStateManager.updateSaveButtonsState();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -398,5 +440,36 @@ public class MovieController {
     @FXML
     protected void openDocumentation() {
         hostServices.showDocument("https://github.com/mynguy/movieGradle/blob/main/README.md");
+    }
+
+    @FXML
+    protected void onOpenRecentLibraryClicked() {
+        if (recentLibrarySet != null) {
+            // Load the most recent library's movie data
+            movieTableView.getItems().clear();
+            movieTableView.getItems().addAll(recentLibrarySet);
+
+            // Update UI elements and welcome text
+            sessionContainer.setVisible(true);
+            logoImageView.setVisible(false);
+            welcomeText.setText("Opened most recent library");
+            genreComboBox.getSelectionModel().select("Select genre");
+
+            saveButtonStateManager.updateSaveButtonsState();
+        }
+    }
+
+    private void updateOpenRecentLibraryMenuItemState() {
+        openRecentLibraryMenuItem.setDisable(recentLibrarySet.isEmpty());
+    }
+
+    private void loadRecentLibrary(Set<Movie> library) {
+        recentLibrarySet = library;
+        updateOpenRecentLibraryMenuItemState();
+    }
+
+    private void clearRecentLibrary() {
+        recentLibrarySet.clear();
+        updateOpenRecentLibraryMenuItemState();
     }
 }
