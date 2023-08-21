@@ -55,10 +55,10 @@ The repository now includes a GUI application for managing movie sets and perfor
 
 ### The GUI application features the following:
 
-Efficient Data Entry: Input movie details seamlessly.
-Instant Movie Addition: Add movies with a single click.
-Flexible Data Saving: Preserve movies in CSV, binary, or XML.
-User-Friendly Help: Access instructions effortlessly.
-Easy Launch: Initiate MovieApplication class.
+Efficient Data Entry: Input movie details seamlessly.  
+Instant Movie Addition: Add movies with a single click.  
+Flexible Data Saving: Preserve movies in CSV, binary, or XML.  
+User-Friendly Help: Access instructions effortlessly.  
+Easy Launch: Initiate MovieApplication class.  
 
 Feel free to explore the code, run the GUI application, and utilize the serialization and deserialization capabilities for movie sets.
