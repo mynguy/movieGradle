@@ -44,18 +44,12 @@ class MovieTest {
         xmlFile.delete();
     }
 
-    /**
-     * Tests the equality of a movie set and its copy.
-     */
     @Test
     public void testEquals() {
         Set<Movie> movieSetCopy = new TreeSet<>(movieSet);
         assertEquals(movieSet, movieSetCopy);
     }
 
-    /**
-     * Tests the pretty print format of a movie's information.
-     */
     @Test
     public void testPrettyPrint() {
         Movie movie = new Movie("Inception", 2010, "Science Fiction");
@@ -108,7 +102,6 @@ class MovieTest {
 
     /**
      * Tests XML serialization and deserialization of the movie set.
-     * Verifies equivalence between original and deserialized movie sets.
      */
     @Test
     public void testXMLSerializeAndDeserialize() throws IOException, ClassNotFoundException {

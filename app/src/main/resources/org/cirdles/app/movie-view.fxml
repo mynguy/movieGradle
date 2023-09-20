@@ -85,9 +85,9 @@
 
             <HBox alignment="CENTER">
                 <Label fx:id="welcomeText" alignment="CENTER" prefHeight="17.0" prefWidth="335.0">
-               <HBox.margin>
-                  <Insets bottom="-3.0" top="-3.0" />
-               </HBox.margin></Label>
+                    <HBox.margin>
+                        <Insets bottom="-3.0" top="-3.0" />
+                    </HBox.margin></Label>
             </HBox>
 
             <TableView fx:id="movieTableView" prefHeight="405.0" prefWidth="335.0" VBox.vgrow="ALWAYS">

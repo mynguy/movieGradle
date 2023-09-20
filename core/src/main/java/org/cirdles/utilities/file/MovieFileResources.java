@@ -23,7 +23,7 @@ public enum MovieFileResources {
     }
 
     public static void initLocalResources() throws IOException {
-        // Use the current working directory to get the root path of the project
+
         String projectRoot = Paths.get(System.getProperty("user.dir")).getParent().toString();
 
         String movieResourcesFolderPath = Paths.get(projectRoot,"app", "MovieResources").toString();
@@ -67,7 +67,6 @@ public enum MovieFileResources {
                     e.printStackTrace();
                 }
             } else {
-                // Assuming the resource names are relative paths within the resourceFolderName
                 File resourceFileName = new File(resourceFolderName, name);
                 File resourceLocalFileName = new File(resourceTargetFolder, name);
 
