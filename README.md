@@ -55,12 +55,10 @@ The repository now includes a GUI application for managing movie sets and perfor
 
 ### The GUI application features the following:
 
-Input fields for entering the details of a movie, including name, release year, and genre.
-An "Add Movie" button that adds the movie to the movie set when clicked.
-A "Save Movies" button that allows the user to save the movie set to a CSV file and serialize it to binary and XML formats.
-A "Help" button that displays a dialog box with instructions and information about the application.
-To run the GUI application, launch the MovieApplication class. This will open a window where you can enter movie details, add movies to the set, and save the movie set in various formats.
-
-Serialization and deserialization provide a convenient way to store and exchange data in different formats. By using the provided classes and the GUI application, you can easily manage movie sets, perform serialization and deserialization operations, and ensure data persistence and interchangeability in your Java applications.
+Efficient Data Entry: Input movie details seamlessly.  
+Instant Movie Addition: Add movies with a single click.  
+Flexible Data Saving: Preserve movies in CSV, binary, or XML.  
+User-Friendly Help: Access instructions effortlessly.  
+Easy Launch: Initiate MovieApplication class.  
 
 Feel free to explore the code, run the GUI application, and utilize the serialization and deserialization capabilities for movie sets.
